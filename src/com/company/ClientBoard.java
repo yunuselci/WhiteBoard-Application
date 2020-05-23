@@ -19,7 +19,7 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static ObjectInputStream ois;
     public static String srv;
     public static Socket myClient;
-
+    public static String []infos = {"100","100","undefined"};
     public ClientBoard(String info){
         super("Student Screen");
         srv = info;
@@ -44,7 +44,7 @@ public class ClientBoard extends JFrame implements ActionListener {
         setJMenuBar(jmb);
     }
     public void center(){
-        jbCenter = new ServerPanel();
+        jbCenter = new ClientPanel();
         jbCenter.setBackground(Color.white);
         add(jbCenter,BorderLayout.CENTER);
     }
@@ -75,7 +75,7 @@ public class ClientBoard extends JFrame implements ActionListener {
 
     }
 
-    private void connToS() throws IOException{
+    public static void connToS() throws IOException{
         dispMessage("Attempting\n");
         myClient = new Socket(InetAddress.getByName(srv), 12345);
     }
@@ -91,16 +91,15 @@ public class ClientBoard extends JFrame implements ActionListener {
     }
 
 
-    private void processConn() throws IOException{
+    public void processConn() throws IOException{
         dispMessage("Successful");
         String []msg = new String[0];
 
         do {
             try {
                 msg = (String[]) ois.readObject();
-                for (String s : msg) {
-                    System.out.println(s);
-                }
+                if (msg.length + 1 >= 0) System.arraycopy(msg, 0, infos, 0, msg.length);
+                repaint();
             }
             catch (ClassNotFoundException e) {
                 dispMessage("Unknown");
@@ -108,7 +107,7 @@ public class ClientBoard extends JFrame implements ActionListener {
         }while(!msg[0].equals("sa"));
     }
 
-    private void closeConn() {
+    public static void closeConn() {
         dispMessage("\nTerminating Conn\n");
 
         try {
