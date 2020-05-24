@@ -19,7 +19,7 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static ObjectInputStream ois;
     public static String srv;
     public static Socket myClient;
-    public static String []infos = {"100","100","undefined"};
+    public static String []msg = {"100","100","undefined"};
     public ClientBoard(String info){
         super("Student Screen");
         srv = info;
@@ -93,12 +93,12 @@ public class ClientBoard extends JFrame implements ActionListener {
 
     public void processConn() throws IOException{
         dispMessage("Successful");
-        String []msg = new String[0];
-
         do {
             try {
-                msg = (String[]) ois.readObject();
-                if (msg.length + 1 >= 0) System.arraycopy(msg, 0, infos, 0, msg.length);
+                //msg = (String[]) ois.readObject();
+                Object list = ois.readObject();
+
+
                 repaint();
             }
             catch (ClassNotFoundException e) {

@@ -178,14 +178,28 @@ public class ServerBoard extends JFrame implements ActionListener,
         }
     }
 
-    public static void send(int x, int y, String type) {
+    public static void sendArray(int corX, int corY, String shapeName) {
         try {
-            String[] strArray1 = new String[]{String.valueOf(x), String.valueOf(y), type};
+            String[] strArray1 = new String[]{String.valueOf(corX),
+                    String.valueOf(corY),
+                    shapeName};
             oos.writeObject(strArray1);
             oos.flush();
         }
         catch (IOException e) {
             System.out.println("Error From Server Send Method");
+        }
+    }
+
+    public static void sendList(String shapeName) {
+        try {
+            if(shapeName.equals("MRect")){
+                oos.writeObject(squares);
+                oos.flush();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
