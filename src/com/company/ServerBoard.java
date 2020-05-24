@@ -21,7 +21,7 @@ public class ServerBoard extends JFrame implements ActionListener,
     protected static Color c;
     protected static int x,x1,x2;
     protected static int y,y1,y2;
-    public static int draw_type = 0;
+    public static String draw_type ="Empty";
     public static int type_for_square = 0;
     public static int type_for_circle = 0;
     public static ObjectOutputStream oos;
@@ -29,7 +29,11 @@ public class ServerBoard extends JFrame implements ActionListener,
     public static ServerSocket server;
     public static Socket conn;
 
-    public static boolean flag = false;
+    public static boolean isMultiple = false;
+    public static boolean isMLine = false;
+    public static boolean isMRect = false;
+    public static boolean isMOval = false;
+
     public static ArrayList<Points> lines = new ArrayList<>();
     public static ArrayList<Points> squares = new ArrayList<>();
     public static ArrayList<Points> circles = new ArrayList<>();
@@ -150,7 +154,7 @@ public class ServerBoard extends JFrame implements ActionListener,
         //send("Successful");
         System.out.println("successfull");
 
-        setButtonEnabled(true);
+        //setButtonEnabled(true);
         String msg = "";
 
         do {
@@ -193,11 +197,19 @@ public class ServerBoard extends JFrame implements ActionListener,
 
     public static void sendList(String shapeName) {
         try {
+
+
             if(shapeName.equals("MRect")){
+                oos.reset();
                 oos.writeObject(squares);
                 oos.flush();
+            }else if(shapeName.equals("MOval")){
+                oos.reset();
+                oos.writeObject(circles);
+                oos.flush();
             }
-        }
+
+            }
         catch (IOException e) {
             e.printStackTrace();
         }
@@ -223,28 +235,36 @@ public class ServerBoard extends JFrame implements ActionListener,
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(!flag) {
+        if(!isMultiple) {
             x = e.getX();
             y = e.getY();
         }
         else {
-            Points p = new Points();
-            p.x = e.getX();
-            p.y = e.getY();
-            squares.add(p);
-            circles.add(p);
+            if(isMRect){
+                Points p = new Points(x,y);
+                p.x = e.getX();
+                p.y = e.getY();
+                p.shapeName = "MRect";
+                squares.add(p);
+            }else if(isMOval){
+                Points p = new Points(x,y);
+                p.x = e.getX();
+                p.y = e.getY();
+                p.shapeName = "MOval";
+                circles.add(p);
+            }
         }
         repaint();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(!flag) {
+        if(!isMultiple) {
             x1 = e.getX();
             y1 = e.getY();
         }
         else {
-            Points p = new Points();
+            Points p = new Points(x,y);
             p.x1 = e.getX();
             p.y1 = e.getY();
             lines.add(p);
@@ -255,12 +275,12 @@ public class ServerBoard extends JFrame implements ActionListener,
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(!flag) {
+        if(!isMultiple) {
             x2 = e.getX();
             y2 = e.getY();
         }
         else {
-            Points p = new Points();
+            Points p = new Points(x,y);
             p.x2 = e.getX();
             p.y2 = e.getY();
             lines.add(p);
@@ -305,32 +325,44 @@ public class ServerBoard extends JFrame implements ActionListener,
             repaint();
         }
         else if(e.getSource() == line_sbm) {
-
-            flag = false;
+            draw_type ="Line";
+            isMRect = false;
+            isMOval =false;
+            isMultiple = false;
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Line");
         }
         else if(e.getSource() == mline_sbm) {
-            draw_type = 1;
-            flag = true;
+            draw_type = "MLine";
+            isMultiple = true;
+            isMRect = false;
+            isMOval =false;
         }
         else if(e.getSource() == square_sbm) {
-
-            flag = false;
+            draw_type = "Rect";
+            isMRect = false;
+            isMultiple = false;
+            isMOval =false;
             type_for_square = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter\n1- Square\n2- Fill Square"));
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Square");
         }
         else if(e.getSource() == msquare_sbm) {
-            draw_type = 2;
-            flag = true;
+            draw_type = "MRect";
+            isMultiple = true;
+            isMRect = true;
+            isMOval =false;
         }else if(e.getSource() == circle_sbm) {
-
-            flag = false;
+            draw_type = "Oval";
+            isMRect = false;
+            isMultiple = false;
+            isMOval =false;
             type_for_circle = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter\n1- Circle\n2- Fill Circle"));
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Circle");
         }
         else if(e.getSource() == mcircle_sbm) {
-            draw_type = 3;
-            flag = true;
+            draw_type = "MOval";
+            isMultiple = true;
+            isMRect = false;
+            isMOval =true;
         }
 
         else if(e.getSource() == exit_sbm) {

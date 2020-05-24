@@ -19,7 +19,16 @@ public class ClientPanel extends JPanel {
         } else if (ClientBoard.msg[2].equals("FOval")) {
             g.fillOval(Integer.parseInt(ClientBoard.msg[0]),
                     Integer.parseInt(ClientBoard.msg[1]), 150, 150);
+        }else if (ClientBoard.isMRect){
+            for (int i = 0; i < ClientBoard.cordinates.size(); i++) {
+                g.drawRect(ClientBoard.cordinates.get(i).x, ClientBoard.cordinates.get(i).y, 150, 150);
+            }
+        }else if(ClientBoard.isMOval){
+            for (int i = 0; i < ClientBoard.cordinates.size(); i++) {
+                g.drawOval(ClientBoard.cordinates.get(i).x, ClientBoard.cordinates.get(i).y, 150, 150);
+            }
         }
+
         /*
         if (ServerBoard.draw_type == 1){
             for (int i = 0; i < ServerBoard.lines.size(); i++) {
