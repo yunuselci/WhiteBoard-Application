@@ -19,7 +19,6 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static ObjectInputStream ois;
     public static String srv;
     public static Socket myClient;
-    public static String[] msg = {"100", "100", "undefined"};
     public static ArrayList<Points> cordinates = new ArrayList<>();
     public static String drawType = "Nothing";
 
@@ -116,6 +115,8 @@ public class ClientBoard extends JFrame implements ActionListener {
                         drawType = "MSquare";
                     } else if (cordinate.shapeName.equals("MCircle")) {
                         drawType = "MCircle";
+                    }else if (cordinate.shapeName.equals("Clear")){
+                        drawType = "Clear";
                     }
 
                 }
@@ -123,7 +124,7 @@ public class ClientBoard extends JFrame implements ActionListener {
             } catch (ClassNotFoundException e) {
                 dispMessage("Unknown");
             }
-        } while (!msg[0].equals("sa"));
+        } while (true);
     }
 
     public static void closeConn() {

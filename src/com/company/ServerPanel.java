@@ -9,11 +9,11 @@ public class ServerPanel extends JPanel {
         super.paint(g);
         g.setColor(ServerBoard.c);
 
-
         if (ServerBoard.draw_type.equals("Square")) {
             for (int i = 1; i < ServerBoard.square.size(); i++) {
                 ServerBoard.sendList("Square");
                 g.drawRect(ServerBoard.square.get(i).x, ServerBoard.square.get(i).y, 150, 150);
+
             }
         } else if (ServerBoard.draw_type.equals("FSquare")) {
             for (int i = 1; i < ServerBoard.FSquare.size(); i++) {
@@ -24,6 +24,7 @@ public class ServerPanel extends JPanel {
             for (int i = 1; i < ServerBoard.circle.size(); i++) {
                 ServerBoard.sendList("Circle");
                 g.drawOval(ServerBoard.circle.get(i).x,ServerBoard.circle.get(i).y,150,150);
+
             }
         } else if(ServerBoard.draw_type.equals("FCircle")){
             for (int i = 0; i < ServerBoard.FCircle.size(); i++) {
@@ -46,6 +47,13 @@ public class ServerPanel extends JPanel {
                 ServerBoard.sendList("MCircle");
                 g.drawOval(ServerBoard.circles.get(i).x, ServerBoard.circles.get(i).y, 150, 150);
             }
+        }else if(ServerBoard.draw_type.equals("Clear")){
+
+                ServerBoard.sendList("Clear");
+                g.setColor(Color.WHITE);
+                g.fillRect(100,100,getSize().width,getSize().height);
+
+
         }
 
 

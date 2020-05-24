@@ -13,7 +13,8 @@ import java.util.ArrayList;
 
 public class ServerBoard extends JFrame implements ActionListener,
         KeyListener,
-        MouseListener{
+        MouseListener,
+MouseMotionListener{
 
 
     BorderLayout bl;
@@ -35,6 +36,7 @@ public class ServerBoard extends JFrame implements ActionListener,
     public static ArrayList<Points> lines = new ArrayList<>();
     public static ArrayList<Points> squares = new ArrayList<>();
     public static ArrayList<Points> circles = new ArrayList<>();
+    public static ArrayList<Points> clears = new ArrayList<>();
     public static Points squarePoints = new Points(x, y);
     public static Points FSquarePoints = new Points(x, y);
     public static Points circlePoints = new Points(x, y);
@@ -50,15 +52,15 @@ public class ServerBoard extends JFrame implements ActionListener,
 
     JPanel jpCenter;
     JMenuBar jmb;
-    JMenu color_m, shape, exit;
-    JMenuItem color_sbm, line_sbm, mline_sbm, square_sbm, msquare_sbm, circle_sbm, mcircle_sbm, exit_sbm;
+    JMenu color_m, shape, clear, exit;
+    JMenuItem color_sbm, line_sbm, mline_sbm, square_sbm, msquare_sbm, circle_sbm, mcircle_sbm, clear_sbm, exit_sbm;
 
     public void menu() {
         jmb = new JMenuBar();
 
         color_m = new JMenu("Color");
         shape = new JMenu("Shape");
-
+        clear = new JMenu("Clear");
         exit = new JMenu("Exit");
 
         color_sbm = new JMenuItem("Color Chooser");
@@ -82,6 +84,8 @@ public class ServerBoard extends JFrame implements ActionListener,
         mline_sbm = new JMenuItem("Multiple Line");
         mline_sbm.addActionListener(this);
 
+        clear_sbm = new JMenuItem("Clear The Screen");
+        clear_sbm.addActionListener(this);
 
         exit_sbm = new JMenuItem("Close App");
         exit_sbm.addActionListener(this);
@@ -95,10 +99,13 @@ public class ServerBoard extends JFrame implements ActionListener,
         shape.add(mcircle_sbm);
         shape.add(line_sbm);
         shape.add(mline_sbm);
+        clear.add(clear_sbm);
         exit.add(exit_sbm);
+
 
         jmb.add(color_m);
         jmb.add(shape);
+        jmb.add(clear);
         jmb.add(exit);
 
         add(jmb);
@@ -111,6 +118,7 @@ public class ServerBoard extends JFrame implements ActionListener,
         jpCenter.addMouseListener(this);
         jpCenter.setBackground(Color.white);
         add(jpCenter, BorderLayout.CENTER);
+
     }
 
     public void runServer() {
@@ -222,6 +230,10 @@ public class ServerBoard extends JFrame implements ActionListener,
                     oos.writeObject(circles);
                     oos.flush();
                     break;
+                case "Clear":
+                    oos.reset();
+                    oos.writeObject(clears);
+                    oos.flush();
             }
 
         } catch (IOException e) {
@@ -249,72 +261,81 @@ public class ServerBoard extends JFrame implements ActionListener,
     @Override
     public void mouseClicked(MouseEvent e) {
 
-        if (draw_type.equals("Square")) {
-            squarePoints.x = e.getX();
-            squarePoints.y = e.getY();
-            squarePoints.shapeName = "Square";
-            square.add(squarePoints);
-        }  else if (draw_type.equals("Circle")) {
-            circlePoints.x = e.getX();
-            circlePoints.y = e.getY();
-            circlePoints.shapeName = "Circle";
-            circle.add(circlePoints);
-        } else if(draw_type.equals("FSquare")){
-            FSquarePoints.x = e.getX();
-            FSquarePoints.y = e.getY();
-            FSquarePoints.shapeName = "FSquare";
-            FSquare.add(FSquarePoints);
-        }else if(draw_type.equals("FCircle")){
-            FCirclePoints.x = e.getX();
-            FCirclePoints.y = e.getY();
-            FCirclePoints.shapeName = "FCircle";
-            FCircle.add(FCirclePoints);
-        }
-        else if (draw_type.equals("MSquare")) {
-            Points p = new Points(x, y);
-            p.x = e.getX();
-            p.y = e.getY();
-            p.shapeName = "MSquare";
-            squares.add(p);
-        } else if (draw_type.equals("MCircle")) {
-            Points p = new Points(x, y);
-            p.x = e.getX();
-            p.y = e.getY();
-            p.shapeName = "MCircle";
-            circles.add(p);
-        }
-        repaint();
+        switch (draw_type) {
+            case "Square":
+                squarePoints.x = e.getX();
+                squarePoints.y = e.getY();
+                squarePoints.shapeName = "Square";
+                square.add(squarePoints);
 
-        /*
-        if(!isMultiple) {
-            Points p = new Points(x,y);
-            p.x = e.getX();
-            p.y = e.getY();
-            p.shapeName = "Rect";
-            square.add(p);
-        }
-        else {
-            if(isMRect){
-                Points p = new Points(x,y);
+                break;
+            case "Circle":
+                circlePoints.x = e.getX();
+                circlePoints.y = e.getY();
+                circlePoints.shapeName = "Circle";
+                circle.add(circlePoints);
+
+                break;
+            case "FSquare":
+                FSquarePoints.x = e.getX();
+                FSquarePoints.y = e.getY();
+                FSquarePoints.shapeName = "FSquare";
+                FSquare.add(FSquarePoints);
+                break;
+            case "FCircle":
+                FCirclePoints.x = e.getX();
+                FCirclePoints.y = e.getY();
+                FCirclePoints.shapeName = "FCircle";
+                FCircle.add(FCirclePoints);
+                break;
+            case "MSquare": {
+                Points p = new Points(x, y);
                 p.x = e.getX();
                 p.y = e.getY();
-                p.shapeName = "MRect";
+                p.shapeName = "MSquare";
+                circles.clear();
                 squares.add(p);
-            }else if(isMOval){
-                Points p = new Points(x,y);
+                break;
+            }
+            case "MCircle": {
+                Points p = new Points(x, y);
                 p.x = e.getX();
                 p.y = e.getY();
-                p.shapeName = "MOval";
+                p.shapeName = "MCircle";
+                squares.clear();
                 circles.add(p);
+                break;
+            }
+            case "Clear": {
+                Points p = new Points(x, y);
+                p.x = 100;
+                p.y = 100;
+                p.shapeName = "Clear";
+                square.clear();
+                squares.clear();
+                line.clear();
+                lines.clear();
+                circle.clear();
+                circles.clear();
+                FSquare.clear();
+                FCircle.clear();
+                clears.add(p);
+                break;
             }
         }
         repaint();
 
-         */
     }
 
+    @Override
+    public void mouseDragged(MouseEvent e) {
 
+    }
 
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
     @Override
     public void mousePressed(MouseEvent e) {
 
@@ -363,15 +384,14 @@ public class ServerBoard extends JFrame implements ActionListener,
             repaint();
         } else if (e.getSource() == line_sbm) {
             draw_type = "Line";
-            JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Line");
         } else if (e.getSource() == mline_sbm) {
             draw_type = "MLine";
         } else if (e.getSource() == square_sbm) {
             draw_type = "Square";
             type_for_square = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Square\n2- Fill Square"));
-            if(type_for_square==2){
-                draw_type="FSquare";
-            }else{
+            if (type_for_square == 2) {
+                draw_type = "FSquare";
+            } else {
                 draw_type = "Square";
             }
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Square");
@@ -380,19 +400,24 @@ public class ServerBoard extends JFrame implements ActionListener,
         } else if (e.getSource() == circle_sbm) {
             draw_type = "Circle";
             type_for_circle = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Circle\n2- Fill Circle"));
-            if(type_for_circle==2){
-                draw_type="FCircle";
-            }else{
-                draw_type="Circle";
+            if (type_for_circle == 2) {
+                draw_type = "FCircle";
+            } else {
+                draw_type = "Circle";
             }
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Circle");
         } else if (e.getSource() == mcircle_sbm) {
             draw_type = "MCircle";
+        } else if (e.getSource() == clear_sbm) {
+            draw_type = "Clear";
+            JOptionPane.showMessageDialog(this, "Now Click Center Panel for Clear The Screen");
+
         } else if (e.getSource() == exit_sbm) {
             System.exit(0);
         }
 
     }
+
 
 
 }

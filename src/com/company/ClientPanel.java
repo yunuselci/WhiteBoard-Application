@@ -34,6 +34,10 @@ public class ClientPanel extends JPanel {
                     g.drawOval(ClientBoard.cordinates.get(i).x, ClientBoard.cordinates.get(i).y, 150, 150);
                 }
                 break;
+            case "Clear":
+                g.setColor(Color.WHITE);
+                g.fillRect(100,100,getSize().width,getSize().height);
+
         }
 
         /*
