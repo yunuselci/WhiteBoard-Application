@@ -7,23 +7,23 @@ public class ClientPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if (ClientBoard.msg[2].equals("Rect")) {
-            g.drawRect(Integer.parseInt(ClientBoard.msg[0]),
-                    Integer.parseInt(ClientBoard.msg[1]), 150, 150);
-        } else if (ClientBoard.msg[2].equals("FRect")) {
-            g.fillRect(Integer.parseInt(ClientBoard.msg[0]),
-                    Integer.parseInt(ClientBoard.msg[1]), 150, 150);
-        } else if (ClientBoard.msg[2].equals("Oval")) {
-            g.drawOval(Integer.parseInt(ClientBoard.msg[0]),
-                    Integer.parseInt(ClientBoard.msg[1]), 150, 150);
-        } else if (ClientBoard.msg[2].equals("FOval")) {
-            g.fillOval(Integer.parseInt(ClientBoard.msg[0]),
-                    Integer.parseInt(ClientBoard.msg[1]), 150, 150);
-        }else if (ClientBoard.isMRect){
+        if (ClientBoard.drawType.equals("Square")) {
+            g.drawRect(ClientBoard.cordinates.get(0).x,
+                    ClientBoard.cordinates.get(0).y, 150, 150);
+        } else if (ClientBoard.drawType.equals("FSquare")) {
+            g.fillRect(ClientBoard.cordinates.get(0).x,
+                    ClientBoard.cordinates.get(0).y, 150, 150);
+        } else if (ClientBoard.drawType.equals("Circle")) {
+            g.drawOval(ClientBoard.cordinates.get(0).x,
+                    ClientBoard.cordinates.get(0).y, 150, 150);
+        } else if (ClientBoard.drawType.equals("FCircle")) {
+            g.fillOval(ClientBoard.cordinates.get(0).x,
+                    ClientBoard.cordinates.get(0).y, 150, 150);
+        }else if (ClientBoard.drawType.equals("MSquare")){
             for (int i = 0; i < ClientBoard.cordinates.size(); i++) {
                 g.drawRect(ClientBoard.cordinates.get(i).x, ClientBoard.cordinates.get(i).y, 150, 150);
             }
-        }else if(ClientBoard.isMOval){
+        }else if(ClientBoard.drawType.equals("MCircle")){
             for (int i = 0; i < ClientBoard.cordinates.size(); i++) {
                 g.drawOval(ClientBoard.cordinates.get(i).x, ClientBoard.cordinates.get(i).y, 150, 150);
             }

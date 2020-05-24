@@ -21,8 +21,7 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static Socket myClient;
     public static String[] msg = {"100", "100", "undefined"};
     public static ArrayList<Points> cordinates = new ArrayList<>();
-    public static boolean isMRect = false;
-    public static boolean isMOval = false;
+    public static String drawType = "Nothing";
 
     public ClientBoard(String info) {
         super("Student Screen");
@@ -98,21 +97,29 @@ public class ClientBoard extends JFrame implements ActionListener {
         dispMessage("Successful");
         do {
             try {
-                //msg = (String[]) ois.readObject();
-
 
                 cordinates = (ArrayList<Points>) ois.readObject();
                 for (Points cordinate : cordinates) {
-                    if (cordinate.shapeName.equals("MRect")) {
-                        isMRect = true;
-                    }else if(cordinate.shapeName.equals("MOval")){
-                        isMRect = false;
-                        isMOval = true;
+                    if (cordinate.shapeName.equals("Square")) {
+                        drawType = "Square";
+                    } else if (cordinate.shapeName.equals("FSquare")) {
+                        drawType = "FSquare";
+                    } else if (cordinate.shapeName.equals("FCircle")) {
+                        drawType = "FCircle";
+                    } else if (cordinate.shapeName.equals("Circle")) {
+                        drawType = "Circle";
+                    } else if (cordinate.shapeName.equals("Line")) {
+                        drawType = "Line";
+                    } else if (cordinate.shapeName.equals("MLine")) {
+                        drawType = "MLine";
+                    } else if (cordinate.shapeName.equals("MSquare")) {
+                        drawType = "MSquare";
+                        System.out.println("1");
+                    } else if (cordinate.shapeName.equals("MCircle")) {
+                        drawType = "MCircle";
                     }
 
                 }
-
-
                 repaint();
             } catch (ClassNotFoundException e) {
                 dispMessage("Unknown");
