@@ -98,9 +98,9 @@ public class ClientBoard extends JFrame implements ActionListener {
         dispMessage("Successful");
         do {
             try {
-                msg = (String[]) ois.readObject();
+                //msg = (String[]) ois.readObject();
 
-                /*
+
                 cordinates = (ArrayList<Points>) ois.readObject();
                 for (Points cordinate : cordinates) {
                     if (cordinate.shapeName.equals("MRect")) {
@@ -112,7 +112,7 @@ public class ClientBoard extends JFrame implements ActionListener {
 
                 }
 
-                 */
+
                 repaint();
             } catch (ClassNotFoundException e) {
                 dispMessage("Unknown");
