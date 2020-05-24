@@ -99,24 +99,31 @@ public class ClientBoard extends JFrame implements ActionListener {
 
                 cordinates = (ArrayList<Points>) ois.readObject();
                 for (Points cordinate : cordinates) {
-                    if (cordinate.shapeName.equals("Square")) {
-                        drawType = "Square";
-                    } else if (cordinate.shapeName.equals("FSquare")) {
-                        drawType = "FSquare";
-                    } else if (cordinate.shapeName.equals("FCircle")) {
-                        drawType = "FCircle";
-                    } else if (cordinate.shapeName.equals("Circle")) {
-                        drawType = "Circle";
-                    } else if (cordinate.shapeName.equals("Line")) {
-                        drawType = "Line";
-                    } else if (cordinate.shapeName.equals("MLine")) {
-                        drawType = "MLine";
-                    } else if (cordinate.shapeName.equals("MSquare")) {
-                        drawType = "MSquare";
-                    } else if (cordinate.shapeName.equals("MCircle")) {
-                        drawType = "MCircle";
-                    }else if (cordinate.shapeName.equals("Clear")){
-                        drawType = "Clear";
+                    switch (cordinate.shapeName) {
+                        case "Square":
+                            drawType = "Square";
+                            break;
+                        case "FSquare":
+                            drawType = "FSquare";
+                            break;
+                        case "FCircle":
+                            drawType = "FCircle";
+                            break;
+                        case "Circle":
+                            drawType = "Circle";
+                            break;
+                        case "Line":
+                            drawType = "Line";
+                            break;
+                        case "MSquare":
+                            drawType = "MSquare";
+                            break;
+                        case "MCircle":
+                            drawType = "MCircle";
+                            break;
+                        case "Clear":
+                            drawType = "Clear";
+                            break;
                     }
 
                 }

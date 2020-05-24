@@ -33,7 +33,6 @@ MouseMotionListener{
     public static ArrayList<Points> FSquare = new ArrayList<>();
     public static ArrayList<Points> circle = new ArrayList<>();
     public static ArrayList<Points> FCircle = new ArrayList<>();
-    public static ArrayList<Points> lines = new ArrayList<>();
     public static ArrayList<Points> squares = new ArrayList<>();
     public static ArrayList<Points> circles = new ArrayList<>();
     public static ArrayList<Points> clears = new ArrayList<>();
@@ -41,6 +40,8 @@ MouseMotionListener{
     public static Points FSquarePoints = new Points(x, y);
     public static Points circlePoints = new Points(x, y);
     public static Points FCirclePoints = new Points(x, y);
+    public static Points p = new Points(x1,x2,y1,y2);
+
 
     public ServerBoard() {
         super("Teacher Screen");
@@ -53,7 +54,7 @@ MouseMotionListener{
     JPanel jpCenter;
     JMenuBar jmb;
     JMenu color_m, shape, clear, exit;
-    JMenuItem color_sbm, line_sbm, mline_sbm, square_sbm, msquare_sbm, circle_sbm, mcircle_sbm, clear_sbm, exit_sbm;
+    JMenuItem color_sbm, line_sbm, square_sbm, msquare_sbm, circle_sbm, mcircle_sbm, clear_sbm, exit_sbm;
 
     public void menu() {
         jmb = new JMenuBar();
@@ -81,9 +82,6 @@ MouseMotionListener{
         line_sbm = new JMenuItem("Line");
         line_sbm.addActionListener(this);
 
-        mline_sbm = new JMenuItem("Multiple Line");
-        mline_sbm.addActionListener(this);
-
         clear_sbm = new JMenuItem("Clear The Screen");
         clear_sbm.addActionListener(this);
 
@@ -98,7 +96,6 @@ MouseMotionListener{
         shape.add(circle_sbm);
         shape.add(mcircle_sbm);
         shape.add(line_sbm);
-        shape.add(mline_sbm);
         clear.add(clear_sbm);
         exit.add(exit_sbm);
 
@@ -215,11 +212,6 @@ MouseMotionListener{
                     oos.writeObject(line);
                     oos.flush();
                     break;
-                case "MLine":
-                    oos.reset();
-                    oos.writeObject(lines);
-                    oos.flush();
-                    break;
                 case "MSquare":
                     oos.reset();
                     oos.writeObject(squares);
@@ -314,7 +306,6 @@ MouseMotionListener{
                 square.clear();
                 squares.clear();
                 line.clear();
-                lines.clear();
                 circle.clear();
                 circles.clear();
                 FSquare.clear();
@@ -327,6 +318,7 @@ MouseMotionListener{
 
     }
 
+
     @Override
     public void mouseDragged(MouseEvent e) {
 
@@ -338,13 +330,23 @@ MouseMotionListener{
     }
     @Override
     public void mousePressed(MouseEvent e) {
-
+        if(draw_type.equals("Line")){
+            p.x1 =x2 =e.getX();
+            p.y1 =y2= e.getY();
+        }
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if(draw_type.equals("Line")){
+            p.x2=e.getX();
+            p.y2=e.getY();
+            p.shapeName = "Line";
+            line.add(p);
 
+            repaint();
+        }
     }
 
     @Override
@@ -384,9 +386,7 @@ MouseMotionListener{
             repaint();
         } else if (e.getSource() == line_sbm) {
             draw_type = "Line";
-        } else if (e.getSource() == mline_sbm) {
-            draw_type = "MLine";
-        } else if (e.getSource() == square_sbm) {
+        }  else if (e.getSource() == square_sbm) {
             draw_type = "Square";
             type_for_square = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Square\n2- Fill Square"));
             if (type_for_square == 2) {

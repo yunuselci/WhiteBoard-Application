@@ -14,6 +14,7 @@ public class ServerPanel extends JPanel {
                 ServerBoard.sendList("Square");
                 g.drawRect(ServerBoard.square.get(i).x, ServerBoard.square.get(i).y, 150, 150);
 
+
             }
         } else if (ServerBoard.draw_type.equals("FSquare")) {
             for (int i = 1; i < ServerBoard.FSquare.size(); i++) {
@@ -32,12 +33,7 @@ public class ServerPanel extends JPanel {
                 g.fillOval(ServerBoard.FCircle.get(i).x,ServerBoard.FCircle.get(i).y,150,150);
             }
         }
-        else if (ServerBoard.draw_type.equals("MLine")) {
-            for (int i = 0; i < ServerBoard.lines.size(); i++) {
-                g.drawLine(ServerBoard.lines.get(i).x1, ServerBoard.lines.get(i).y1,
-                        ServerBoard.lines.get(i).x2, ServerBoard.lines.get(i).y2);
-            }
-        } else if (ServerBoard.draw_type.equals("MSquare")) {
+         else if (ServerBoard.draw_type.equals("MSquare")) {
             for (int i = 0; i < ServerBoard.squares.size(); i++) {
                 ServerBoard.sendList("MSquare");
                 g.drawRect(ServerBoard.squares.get(i).x, ServerBoard.squares.get(i).y, 150, 150);
@@ -47,7 +43,15 @@ public class ServerPanel extends JPanel {
                 ServerBoard.sendList("MCircle");
                 g.drawOval(ServerBoard.circles.get(i).x, ServerBoard.circles.get(i).y, 150, 150);
             }
-        }else if(ServerBoard.draw_type.equals("Clear")){
+        }else if(ServerBoard.draw_type.equals("Line")){
+            for (int i = 0; i <ServerBoard.line.size(); i++) {
+                ServerBoard.sendList("Line");
+                g.drawLine(ServerBoard.line.get(i).x1,ServerBoard.line.get(i).y1,
+                        ServerBoard.line.get(i).x2,ServerBoard.line.get(i).y2);
+
+            }
+        }
+        else if(ServerBoard.draw_type.equals("Clear")){
 
                 ServerBoard.sendList("Clear");
                 g.setColor(Color.WHITE);
