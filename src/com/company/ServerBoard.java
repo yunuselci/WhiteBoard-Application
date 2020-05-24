@@ -29,9 +29,7 @@ public class ServerBoard extends JFrame implements ActionListener,
     public static Socket conn;
     public static ArrayList<Points> line = new ArrayList<>();
     public static ArrayList<Points> square = new ArrayList<>();
-    public static ArrayList<Points> FSquare = new ArrayList<>();
     public static ArrayList<Points> circle = new ArrayList<>();
-    public static ArrayList<Points> FCircle = new ArrayList<>();
     public static ArrayList<Points> lines = new ArrayList<>();
     public static ArrayList<Points> squares = new ArrayList<>();
     public static ArrayList<Points> circles = new ArrayList<>();
@@ -194,20 +192,12 @@ public class ServerBoard extends JFrame implements ActionListener,
 
             switch (shapeName) {
                 case "Square":
+                case "FSquare":
                     oos.reset();
                     oos.writeObject(square);
                     oos.flush();
                     break;
-                case "FSquare":
-                    oos.reset();
-                    oos.writeObject(FSquare);
-                    oos.flush();
-                    break;
                 case "FCircle":
-                    oos.reset();
-                    oos.writeObject(FCircle);
-                    oos.flush();
-                    break;
                 case "Circle":
                     oos.reset();
                     oos.writeObject(circle);
@@ -267,24 +257,12 @@ public class ServerBoard extends JFrame implements ActionListener,
             p.y = e.getY();
             p.shapeName = "Square";
             square.add(p);
-        } else if (draw_type.equals("FSquare")) {
-            Points p = new Points(x, y);
-            p.x = e.getX();
-            p.y = e.getY();
-            p.shapeName = "FSquare";
-            FSquare.add(p);
-        } else if (draw_type.equals("Circle")) {
+        }  else if (draw_type.equals("Circle")) {
             Points p = new Points(x, y);
             p.x = e.getX();
             p.y = e.getY();
             p.shapeName = "Circle";
             circle.add(p);
-        } else if (draw_type.equals("FCircle")) {
-            Points p = new Points(x, y);
-            p.x = e.getX();
-            p.y = e.getY();
-            p.shapeName = "FCircle";
-            FCircle.add(p);
         } else if (draw_type.equals("Line")) {
             Points p = new Points(x, y);
             p.x = e.getX();

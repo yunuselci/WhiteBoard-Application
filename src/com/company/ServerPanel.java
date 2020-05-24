@@ -12,16 +12,16 @@ public class ServerPanel extends JPanel {
 
         if (ServerBoard.draw_type.equals("Square") && ServerBoard.type_for_square == 1) {
             for (int i = 1; i < ServerBoard.square.size(); i++) {
-                ServerBoard.sendList("Rect");
+                ServerBoard.sendList("Square");
                 g.drawRect(ServerBoard.square.get(i).x, ServerBoard.square.get(i).y, 150, 150);
             }
-        } else if (ServerBoard.draw_type.equals("FSquare") && ServerBoard.type_for_square == 2) {
+        } else if (ServerBoard.draw_type.equals("Square") && ServerBoard.type_for_square == 2) {
             ServerBoard.sendList("FSquare");
             g.fillRect(ServerBoard.x, ServerBoard.y, 150, 150);
         } else if (ServerBoard.draw_type.equals("Circle") && ServerBoard.type_for_circle == 1) {
             ServerBoard.sendList("Circle");
             g.drawOval(ServerBoard.x, ServerBoard.y, 150, 150);
-        } else if (ServerBoard.draw_type.equals("Oval") && ServerBoard.type_for_circle == 2) {
+        } else if (ServerBoard.draw_type.equals("Circle") && ServerBoard.type_for_circle == 2) {
             ServerBoard.sendList("FCircle");
             g.fillOval(ServerBoard.x, ServerBoard.y, 150, 150);
         } else if (ServerBoard.draw_type.equals("MLine")) {
