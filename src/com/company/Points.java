@@ -12,6 +12,11 @@ public class Points implements Serializable {
         this.y = y;
     }
 
+    public Points() {
+
+    }
+
+
     public void setShapeName(String shapeName) {
         this.shapeName = shapeName;
     }

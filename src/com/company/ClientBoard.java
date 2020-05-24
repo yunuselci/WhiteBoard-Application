@@ -114,7 +114,6 @@ public class ClientBoard extends JFrame implements ActionListener {
                         drawType = "MLine";
                     } else if (cordinate.shapeName.equals("MSquare")) {
                         drawType = "MSquare";
-                        System.out.println("1");
                     } else if (cordinate.shapeName.equals("MCircle")) {
                         drawType = "MCircle";
                     }
@@ -139,29 +138,7 @@ public class ClientBoard extends JFrame implements ActionListener {
         }
     }
 
-    /*
-        public static void recieveMsg() throws IOException, ClassNotFoundException {
-            SocketChannel sChannel = SocketChannel.open();
-            if(sChannel.socket().isConnected()){
-                try{
 
-                    ois = new ObjectInputStream(sChannel.socket().getInputStream());
-                    String[] s = (String[]) ois.readObject();
-                    for (String value : s) {
-                        System.out.println("Message " + value);
-                    }
-                }catch (IOException | ClassNotFoundException e){
-                    e.printStackTrace();
-
-
-                }
-            }
-
-
-
-        }
-
-    */
     public static void dispMessage(final String string) {
         System.out.println(string);
     }
