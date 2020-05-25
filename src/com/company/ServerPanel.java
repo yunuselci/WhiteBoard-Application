@@ -11,6 +11,7 @@ public class ServerPanel extends JPanel {
 
         if (ServerBoard.draw_type.equals("Square")) {
             for (int i = 1; i < ServerBoard.square.size(); i++) {
+
                 ServerBoard.sendList("Square");
                 g.drawRect(ServerBoard.square.get(i).x, ServerBoard.square.get(i).y, 150, 150);
 

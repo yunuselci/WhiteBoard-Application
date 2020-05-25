@@ -8,7 +8,8 @@ public class Server {
         ServerBoard serverBoard = new ServerBoard();
         serverBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         serverBoard.setVisible(true);
-        serverBoard.setSize(800, 600);
+        serverBoard.setSize(1080, 720);
+        serverBoard.setResizable(false);
         serverBoard.runServer();
     }
 }

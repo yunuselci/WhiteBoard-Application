@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Points implements Serializable {
     int x,x1,x2;
     int y,y1,y2;
+    int counter = 0;
     String shapeName;
 
     public Points(int x, int y) {
