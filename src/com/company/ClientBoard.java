@@ -183,46 +183,56 @@ public class ClientBoard extends JFrame implements ActionListener {
             lblMin.setForeground(Color.black);
             lblSec.setForeground(Color.black);
 
-            if(sec == 0){
-                sec=60;
+            if (sec == 0) {
+                sec = 60;
                 min--;
             }
-            if(min ==0){
+            if (min == 0) {
                 lblMin.setForeground(Color.red);
                 lblSec.setForeground(Color.red);
 
             }
-            if(min <0){
-                JOptionPane.showMessageDialog(rootPane,"Time is Over","Stopped",0);
+            if (min < 0) {
+                JOptionPane.showMessageDialog(rootPane, "Time is Over", "Stopped", 0);
 
-                min=0;sec=0;
+                min = 0;
+                sec = 0;
                 timer.stop();
-            }else{
+            } else {
 
                 sec--;
-                if(sec<10){
-                    lblSec.setText("0"+sec);
+                if (sec < 10) {
+                    lblSec.setText("0" + sec);
                     flag_for_clock = false;
                 }
-                if(min<10){
-                    lblMin.setText("0"+min);
-                    if(sec<10){
-                        lblSec.setText("0"+sec);
-                    }else{
-                        lblSec.setText(""+sec);
+                if (min < 10) {
+                    lblMin.setText("0" + min);
+                    if (sec < 10) {
+                        lblSec.setText("0" + sec);
+                    } else {
+                        lblSec.setText("" + sec);
                     }
-                    flag_for_clock=false;
+                    flag_for_clock = false;
                 }
-                if(flag_for_clock){
-                    lblMin.setText(""+min);
-                    lblSec.setText(""+sec);
+                if (flag_for_clock) {
+                    lblMin.setText("" + min);
+                    lblSec.setText("" + sec);
                 }
 
             }
-
-
         });
         timer.start();
+    }
+
+    public static void writeShapeCounter(int numberOfShapes){
+        if(numberOfShapes<=1){
+            shapesTextArea.setText(numberOfShapes +" Shape is drawed");
+
+        }else{
+            shapesTextArea.setText(numberOfShapes +" Shapes are drawed");
+
+        }
+
     }
 
     private void chatTextFieldActionPerformed(ActionEvent evt) {
@@ -340,5 +350,5 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static javax.swing.JLabel lblSec;
     public javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
-    private javax.swing.JTextArea shapesTextArea;
+    public static javax.swing.JTextArea shapesTextArea;
 }

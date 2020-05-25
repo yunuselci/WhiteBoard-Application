@@ -333,10 +333,10 @@ public class ServerBoard extends JFrame implements ActionListener,
 
     public static void writeShapeCounter(int numberOfShapes){
         if(numberOfShapes<=1){
-            shapesTextArea.setText(numberOfShapes + draw_type +" is drawed");
+            shapesTextArea.setText(numberOfShapes + " " + draw_type +" is drawed");
 
         }else{
-            shapesTextArea.setText(numberOfShapes + draw_type +" are drawed");
+            shapesTextArea.setText(numberOfShapes +" "+ draw_type +" are drawed");
 
         }
 
@@ -489,14 +489,12 @@ public class ServerBoard extends JFrame implements ActionListener,
                 squarePoints.x = e.getX();
                 squarePoints.y = e.getY();
                 squarePoints.shapeName = "Square";
-                squarePoints.counter += 1;
                 square.add(squarePoints);
                 break;
             case "Circle":
                 circlePoints.x = e.getX();
                 circlePoints.y = e.getY();
                 circlePoints.shapeName = "Circle";
-                circlePoints.counter += 1;
                 circle.add(circlePoints);
 
                 break;
@@ -504,14 +502,12 @@ public class ServerBoard extends JFrame implements ActionListener,
                 FSquarePoints.x = e.getX();
                 FSquarePoints.y = e.getY();
                 FSquarePoints.shapeName = "FSquare";
-                FSquarePoints.counter += 1;
                 FSquare.add(FSquarePoints);
                 break;
             case "FCircle":
                 FCirclePoints.x = e.getX();
                 FCirclePoints.y = e.getY();
                 FCirclePoints.shapeName = "FCircle";
-                FCirclePoints.counter += 1;
                 FCircle.add(FCirclePoints);
                 break;
             case "MSquare": {
@@ -519,7 +515,6 @@ public class ServerBoard extends JFrame implements ActionListener,
                 p.x = e.getX();
                 p.y = e.getY();
                 p.shapeName = "MSquare";
-                p.counter += 1;
                 circles.clear();
                 squares.add(p);
                 break;
@@ -529,7 +524,6 @@ public class ServerBoard extends JFrame implements ActionListener,
                 p.x = e.getX();
                 p.y = e.getY();
                 p.shapeName = "MCircle";
-                p.counter += 1;
                 squares.clear();
                 circles.add(p);
                 break;
@@ -539,7 +533,6 @@ public class ServerBoard extends JFrame implements ActionListener,
                 p.x = 100;
                 p.y = 100;
                 p.shapeName = "Clear";
-                p.counter = 0;
                 square.clear();
                 squares.clear();
                 line.clear();
@@ -581,7 +574,6 @@ public class ServerBoard extends JFrame implements ActionListener,
             p.x2 = e.getX();
             p.y2 = e.getY();
             p.shapeName = "Line";
-            p.counter += 1;
             line.add(p);
 
             repaint();
