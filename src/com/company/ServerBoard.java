@@ -30,6 +30,7 @@ public class ServerBoard extends JFrame implements ActionListener,
         setLayout(bl);
         menu();
         Components();
+
         for (int i = 0; i < 60; i++) {
             if(i<10){
                 cboxMin.addItem("0"+i);
@@ -273,7 +274,6 @@ public class ServerBoard extends JFrame implements ActionListener,
         // TODO add your handling code here:
     }
 
-
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {
         time.min=min;
         time.sec=sec;
@@ -329,6 +329,17 @@ public class ServerBoard extends JFrame implements ActionListener,
             }
         });
         timer.start();
+    }
+
+    public static void writeShapeCounter(int numberOfShapes){
+        if(numberOfShapes<=1){
+            shapesTextArea.setText(numberOfShapes + draw_type +" is drawed");
+
+        }else{
+            shapesTextArea.setText(numberOfShapes + draw_type +" are drawed");
+
+        }
+
     }
 
     public void runServer() {
@@ -691,7 +702,7 @@ public class ServerBoard extends JFrame implements ActionListener,
     public javax.swing.JLabel lblSec;
     public javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
-    private javax.swing.JTextArea shapesTextArea;
+    static public javax.swing.JTextArea shapesTextArea;
 
 }
 
