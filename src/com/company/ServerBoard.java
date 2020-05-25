@@ -18,10 +18,10 @@ public class ServerBoard extends JFrame implements ActionListener,
         MouseListener,
         MouseMotionListener {
 
-    int min,sec,min1,sec1;
+    int min,sec;
     Timer timer;
     boolean flag_for_clock = true;
-    boolean ifStop = false;
+
     public ServerBoard() {
         super("Teacher Screen");
         bl = new BorderLayout();
@@ -109,7 +109,6 @@ public class ServerBoard extends JFrame implements ActionListener,
         chatTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
         btnStart = new javax.swing.JButton();
-        btnStop = new javax.swing.JButton();
         attandanceLabel = new javax.swing.JLabel();
         shapesLabel = new javax.swing.JLabel();
         chatTextField = new javax.swing.JTextField();
@@ -121,7 +120,8 @@ public class ServerBoard extends JFrame implements ActionListener,
         lblMin = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cboxSec = new javax.swing.JComboBox<>();
-        cboxMin = new javax.swing.JComboBox<>();
+        cboxMin = new javax.swing.JComboBox();
+
 
 
         javax.swing.GroupLayout jpComponentLayout = new javax.swing.GroupLayout(jpComponent);
@@ -146,13 +146,6 @@ public class ServerBoard extends JFrame implements ActionListener,
         btnStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnStartActionPerformed(evt);
-            }
-        });
-
-        btnStop.setText("STOP");
-        btnStop.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStopActionPerformed(evt);
             }
         });
 
@@ -191,12 +184,14 @@ public class ServerBoard extends JFrame implements ActionListener,
                 cboxSecActionPerformed(evt);
             }
         });
+
         cboxMin.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
         cboxMin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboxMinActionPerformed(evt);
             }
         });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -209,10 +204,7 @@ public class ServerBoard extends JFrame implements ActionListener,
                                         .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(chatTextField)
                                         .addComponent(jScrollPane1)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(btnStop, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                                        .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(attandanceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(shapesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jScrollPane2)
@@ -224,7 +216,7 @@ public class ServerBoard extends JFrame implements ActionListener,
                                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(lblSec)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                                                 .addComponent(cboxMin, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(cboxSec, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -251,9 +243,7 @@ public class ServerBoard extends JFrame implements ActionListener,
                                                         .addComponent(cboxSec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(cboxMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(btnStart)
-                                                        .addComponent(btnStop))
+                                                .addComponent(btnStart)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -281,12 +271,6 @@ public class ServerBoard extends JFrame implements ActionListener,
         // TODO add your handling code here:
     }
 
-    private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
-        min1 = min;
-        sec1= sec;
-        ifStop = true;
-        timer.stop();
-    }
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {
         timer = new Timer(1000, new ActionListener() {
@@ -294,11 +278,7 @@ public class ServerBoard extends JFrame implements ActionListener,
             public void actionPerformed(ActionEvent e) {
                 lblMin.setForeground(Color.black);
                 lblSec.setForeground(Color.black);
-                if(ifStop){
-                    min =min1;
-                    sec =sec1;
-                    ifStop=false;
-                }
+
                 if(sec == 0){
                     sec=60;
                     min--;
@@ -682,7 +662,6 @@ public class ServerBoard extends JFrame implements ActionListener,
     public javax.swing.JLabel attandanceLabel;
     public javax.swing.JTextArea attandanceTextArea;
     public javax.swing.JButton btnStart;
-    public javax.swing.JButton btnStop;
     public javax.swing.JComboBox cboxMin;
     public javax.swing.JComboBox cboxSec;
     public javax.swing.JTextArea chatTextArea;
