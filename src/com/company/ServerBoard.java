@@ -1,5 +1,7 @@
 package com.company;
 
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -18,7 +20,7 @@ public class ServerBoard extends JFrame implements ActionListener,
         MouseListener,
         MouseMotionListener {
 
-    int min,sec;
+    public static int min,sec;
     Timer timer;
     boolean flag_for_clock = true;
 
@@ -28,7 +30,7 @@ public class ServerBoard extends JFrame implements ActionListener,
         setLayout(bl);
         menu();
         Components();
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 60; i++) {
             if(i<10){
                 cboxMin.addItem("0"+i);
             }else{
@@ -273,6 +275,14 @@ public class ServerBoard extends JFrame implements ActionListener,
 
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {
+        time.min=min;
+        time.sec=sec;
+        time.shapeName="Time";
+        times.add(time);
+        for (int i = 0; i < times.size(); i++) {
+            sendList("Time");
+        }
+
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -429,6 +439,11 @@ public class ServerBoard extends JFrame implements ActionListener,
                 case "Clear":
                     oos.reset();
                     oos.writeObject(clears);
+                    oos.flush();
+                    break;
+                case "Time":
+                    oos.reset();
+                    oos.writeObject(times);
                     oos.flush();
                     break;
             }
@@ -650,6 +665,8 @@ public class ServerBoard extends JFrame implements ActionListener,
     public static ArrayList<Points> squares = new ArrayList<>();
     public static ArrayList<Points> circles = new ArrayList<>();
     public static ArrayList<Points> clears = new ArrayList<>();
+    public static ArrayList<Points> times = new ArrayList<>();
+    public static Points time=new Points(min,sec,"time");
     public static Points squarePoints = new Points(x, y);
     public static Points FSquarePoints = new Points(x, y);
     public static Points circlePoints = new Points(x, y);

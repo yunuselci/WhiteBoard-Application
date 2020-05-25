@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientBoard extends JFrame implements ActionListener {
+    private static Component rootPane;
     BorderLayout bl;
     public static ObjectOutputStream oos;
     public static ObjectInputStream ois;
@@ -21,6 +22,9 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static Socket myClient;
     public static ArrayList<Points> cordinates = new ArrayList<>();
     public static String drawType = "Nothing";
+    public static int min,sec;
+    public static Timer timer;
+    public static boolean flag_for_clock = true;
 
     public ClientBoard(String info) {
         super("Student Screen");
@@ -28,7 +32,9 @@ public class ClientBoard extends JFrame implements ActionListener {
         bl = new BorderLayout();
         setLayout(bl);
         menu();
-        center();
+        Components();
+
+
     }
 
     JPanel jpComponent;
@@ -47,7 +53,7 @@ public class ClientBoard extends JFrame implements ActionListener {
         setJMenuBar(jmb);
     }
 
-    public void center() {
+    public void Components() {
         jpComponent = new ClientPanel();
         jpComponent.setBackground(Color.white);
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -171,6 +177,54 @@ public class ClientBoard extends JFrame implements ActionListener {
         pack();
     }
 
+    public static void displayTime(){
+
+        timer = new Timer(1000, e -> {
+            lblMin.setForeground(Color.black);
+            lblSec.setForeground(Color.black);
+
+            if(sec == 0){
+                sec=60;
+                min--;
+            }
+            if(min ==0){
+                lblMin.setForeground(Color.red);
+                lblSec.setForeground(Color.red);
+
+            }
+            if(min <0){
+                JOptionPane.showMessageDialog(rootPane,"Time is Over","Stopped",0);
+
+                min=0;sec=0;
+                timer.stop();
+            }else{
+
+                sec--;
+                if(sec<10){
+                    lblSec.setText("0"+sec);
+                    flag_for_clock = false;
+                }
+                if(min<10){
+                    lblMin.setText("0"+min);
+                    if(sec<10){
+                        lblSec.setText("0"+sec);
+                    }else{
+                        lblSec.setText(""+sec);
+                    }
+                    flag_for_clock=false;
+                }
+                if(flag_for_clock){
+                    lblMin.setText(""+min);
+                    lblSec.setText(""+sec);
+                }
+
+            }
+
+
+        });
+        timer.start();
+    }
+
     private void chatTextFieldActionPerformed(ActionEvent evt) {
     }
 
@@ -245,6 +299,9 @@ public class ClientBoard extends JFrame implements ActionListener {
                         case "Clear":
                             drawType = "Clear";
                             break;
+                        case "Time":
+                            drawType = "Time";
+                            break;
                     }
 
                 }
@@ -279,8 +336,8 @@ public class ClientBoard extends JFrame implements ActionListener {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    public javax.swing.JLabel lblMin;
-    public javax.swing.JLabel lblSec;
+    public static javax.swing.JLabel lblMin;
+    public static javax.swing.JLabel lblSec;
     public javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
     private javax.swing.JTextArea shapesTextArea;

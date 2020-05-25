@@ -11,6 +11,7 @@ public class ClientPanel extends JPanel {
             case "Square":
                 g.drawRect(ClientBoard.cordinates.get(0).x,
                         ClientBoard.cordinates.get(0).y, 150, 150);
+
                 break;
             case "FSquare":
                 g.fillRect(ClientBoard.cordinates.get(0).x,
@@ -41,18 +42,16 @@ public class ClientPanel extends JPanel {
             case "Clear":
                 g.setColor(Color.WHITE);
                 g.fillRect(100,100,getSize().width,getSize().height);
+            case "Time":
+                for (int i = 0; i < ClientBoard.cordinates.size(); i++) {
+                    ClientBoard.min = ClientBoard.cordinates.get(i).min;
+                    ClientBoard.sec = ClientBoard.cordinates.get(i).sec;
+                }
+                ClientBoard.displayTime();
 
         }
 
-        /*
-        if (ServerBoard.draw_type == 1){
-            for (int i = 0; i < ServerBoard.lines.size(); i++) {
-                g.drawLine(ServerBoard.lines.get(i).x1, ServerBoard.lines.get(i).y1,
-                        ServerBoard.lines.get(i).x2, ServerBoard.lines.get(i).y2);
-            }
-        }
 
-*/
 
     }
 }
