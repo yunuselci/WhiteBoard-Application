@@ -9,53 +9,43 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ServerBoard extends JFrame implements ActionListener,
         KeyListener,
         MouseListener,
-MouseMotionListener{
+        MouseMotionListener {
 
-
-    BorderLayout bl;
-    protected static Color c;
-    protected static int x, x1, x2;
-    protected static int y, y1, y2;
-    public static String draw_type = "Empty";
-    public static int type_for_square = 0;
-    public static int type_for_circle = 0;
-    public static ObjectOutputStream oos;
-    public static ObjectInputStream ois;
-    public static ServerSocket server;
-    public static Socket conn;
-    public static ArrayList<Points> line = new ArrayList<>();
-    public static ArrayList<Points> square = new ArrayList<>();
-    public static ArrayList<Points> FSquare = new ArrayList<>();
-    public static ArrayList<Points> circle = new ArrayList<>();
-    public static ArrayList<Points> FCircle = new ArrayList<>();
-    public static ArrayList<Points> squares = new ArrayList<>();
-    public static ArrayList<Points> circles = new ArrayList<>();
-    public static ArrayList<Points> clears = new ArrayList<>();
-    public static Points squarePoints = new Points(x, y);
-    public static Points FSquarePoints = new Points(x, y);
-    public static Points circlePoints = new Points(x, y);
-    public static Points FCirclePoints = new Points(x, y);
-    public static Points p = new Points(x1,x2,y1,y2);
-
-
+    int min,sec,min1,sec1;
+    Timer timer;
+    boolean flag_for_clock = true;
+    boolean ifStop = false;
     public ServerBoard() {
         super("Teacher Screen");
         bl = new BorderLayout();
         setLayout(bl);
         menu();
-        center();
+        Components();
+        for (int i = 0; i < 24; i++) {
+            if(i<10){
+                cboxMin.addItem("0"+i);
+            }else{
+                cboxMin.addItem(i);
+            }
 
+        }
+        for (int i = 0; i < 60; i++) {
+            if(i<10){
+                cboxSec.addItem("0"+i);
+            }else{
+                cboxSec.addItem(i);
+            }
+        }
     }
 
-    JPanel jpCenter;
-    JMenuBar jmb;
-    JMenu color_m, shape, clear, exit;
-    JMenuItem color_sbm, line_sbm, square_sbm, msquare_sbm, circle_sbm, mcircle_sbm, clear_sbm, exit_sbm;
+
 
     public void menu() {
         jmb = new JMenuBar();
@@ -111,15 +101,245 @@ MouseMotionListener{
 
     }
 
-    public void center() {
-        jpCenter = new ServerPanel();
-        jpCenter.addMouseListener(this);
-        jpCenter.setBackground(Color.white);
+    public void Components() {
+        jpComponent = new ServerPanel();
+        jpComponent.addMouseListener(this);
+        jpComponent.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane1 = new javax.swing.JScrollPane();
+        chatTextArea = new javax.swing.JTextArea();
+        sendButton = new javax.swing.JButton();
+        btnStart = new javax.swing.JButton();
+        btnStop = new javax.swing.JButton();
+        attandanceLabel = new javax.swing.JLabel();
+        shapesLabel = new javax.swing.JLabel();
+        chatTextField = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        attandanceTextArea = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        shapesTextArea = new javax.swing.JTextArea();
+        lblSec = new javax.swing.JLabel();
+        lblMin = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cboxSec = new javax.swing.JComboBox<>();
+        cboxMin = new javax.swing.JComboBox<>();
 
-        add(jpCenter, BorderLayout.CENTER);
 
+        javax.swing.GroupLayout jpComponentLayout = new javax.swing.GroupLayout(jpComponent);
+        jpComponent.setLayout(jpComponentLayout);
+        jpComponentLayout.setHorizontalGroup(
+                jpComponentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 764, Short.MAX_VALUE)
+        );
+        jpComponentLayout.setVerticalGroup(
+                jpComponentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 660, Short.MAX_VALUE)
+        );
+
+        chatTextArea.setEditable(false);
+        chatTextArea.setColumns(20);
+        chatTextArea.setRows(5);
+        jScrollPane1.setViewportView(chatTextArea);
+
+        sendButton.setText("Send");
+
+        btnStart.setText("START");
+        btnStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartActionPerformed(evt);
+            }
+        });
+
+        btnStop.setText("STOP");
+        btnStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopActionPerformed(evt);
+            }
+        });
+
+        attandanceLabel.setText("Attandance");
+
+        shapesLabel.setText("How Many Shapes Drawed");
+
+        chatTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chatTextFieldActionPerformed(evt);
+            }
+        });
+
+        attandanceTextArea.setEditable(false);
+        attandanceTextArea.setColumns(20);
+        attandanceTextArea.setRows(5);
+        jScrollPane2.setViewportView(attandanceTextArea);
+
+        shapesTextArea.setEditable(false);
+        shapesTextArea.setColumns(20);
+        shapesTextArea.setRows(5);
+        jScrollPane3.setViewportView(shapesTextArea);
+
+        lblSec.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        lblSec.setText("00");
+
+        lblMin.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        lblMin.setText("00");
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        jLabel3.setText(":");
+
+        cboxSec.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        cboxSec.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboxSecActionPerformed(evt);
+            }
+        });
+        cboxMin.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        cboxMin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboxMinActionPerformed(evt);
+            }
+        });
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jpComponent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(chatTextField)
+                                        .addComponent(jScrollPane1)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(btnStop, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                                        .addComponent(attandanceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(shapesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane2)
+                                        .addComponent(jScrollPane3)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addComponent(lblMin)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(lblSec)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(cboxMin, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(cboxSec, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 18, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(shapesLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(attandanceLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(lblSec, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(lblMin, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(cboxSec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(cboxMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(btnStart)
+                                                        .addComponent(btnStop))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(chatTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jpComponent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30))
+        );
+
+        pack();
     }
 
+    private void cboxMinActionPerformed(java.awt.event.ActionEvent evt) {
+        lblMin.setText(""+cboxMin.getSelectedItem());
+        min = Integer.parseInt(lblMin.getText());
+    }
+
+    private void cboxSecActionPerformed(java.awt.event.ActionEvent evt) {
+        lblSec.setText(""+cboxSec.getSelectedItem());
+        sec = Integer.parseInt(lblSec.getText());
+    }
+
+    private void chatTextFieldActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
+        min1 = min;
+        sec1= sec;
+        ifStop = true;
+        timer.stop();
+    }
+
+    private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                lblMin.setForeground(Color.black);
+                lblSec.setForeground(Color.black);
+                if(ifStop){
+                    min =min1;
+                    sec =sec1;
+                    ifStop=false;
+                }
+                if(sec == 0){
+                    sec=60;
+                    min--;
+                }
+                if(min ==0){
+                    lblMin.setForeground(Color.red);
+                    lblSec.setForeground(Color.red);
+
+                }
+                if(min <0){
+                    JOptionPane.showMessageDialog(rootPane,"Time is Over","Stopped",0);
+                    min=0;sec=0;
+                    timer.stop();
+                }else{
+
+                    sec--;
+                    if(sec<10){
+                        lblSec.setText("0"+sec);
+                        flag_for_clock = false;
+                    }
+                    if(min<10){
+                        lblMin.setText("0"+min);
+                        if(sec<10){
+                            lblSec.setText("0"+sec);
+                        }else{
+                            lblSec.setText(""+sec);
+                        }
+                        flag_for_clock=false;
+                    }
+                    if(flag_for_clock){
+                        lblMin.setText(""+min);
+                        lblSec.setText(""+sec);
+                    }
+
+                }
+
+
+            }
+        });
+        timer.start();
+    }
 
     public void runServer() {
         try {
@@ -157,6 +377,7 @@ MouseMotionListener{
 
     public void processConn() throws IOException {
         //send("Successful");
+
         System.out.println("successfull");
 
         //setButtonEnabled(true);
@@ -338,20 +559,21 @@ MouseMotionListener{
     public void mouseMoved(MouseEvent e) {
 
     }
+
     @Override
     public void mousePressed(MouseEvent e) {
-        if(draw_type.equals("Line")){
-            p.x1 =x2 =e.getX();
-            p.y1 =y2= e.getY();
+        if (draw_type.equals("Line")) {
+            p.x1 = x2 = e.getX();
+            p.y1 = y2 = e.getY();
         }
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(draw_type.equals("Line")){
-            p.x2=e.getX();
-            p.y2=e.getY();
+        if (draw_type.equals("Line")) {
+            p.x2 = e.getX();
+            p.y2 = e.getY();
             p.shapeName = "Line";
             p.counter += 1;
             line.add(p);
@@ -397,7 +619,7 @@ MouseMotionListener{
             repaint();
         } else if (e.getSource() == line_sbm) {
             draw_type = "Line";
-        }  else if (e.getSource() == square_sbm) {
+        } else if (e.getSource() == square_sbm) {
             draw_type = "Square";
             type_for_square = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Square\n2- Fill Square"));
             if (type_for_square == 2) {
@@ -429,7 +651,51 @@ MouseMotionListener{
 
     }
 
-
+    BorderLayout bl;
+    protected static Color c;
+    protected static int x, x1, x2;
+    protected static int y, y1, y2;
+    public static String draw_type = "Empty";
+    public static int type_for_square = 0;
+    public static int type_for_circle = 0;
+    public static ObjectOutputStream oos;
+    public static ObjectInputStream ois;
+    public static ServerSocket server;
+    public static Socket conn;
+    public static ArrayList<Points> line = new ArrayList<>();
+    public static ArrayList<Points> square = new ArrayList<>();
+    public static ArrayList<Points> FSquare = new ArrayList<>();
+    public static ArrayList<Points> circle = new ArrayList<>();
+    public static ArrayList<Points> FCircle = new ArrayList<>();
+    public static ArrayList<Points> squares = new ArrayList<>();
+    public static ArrayList<Points> circles = new ArrayList<>();
+    public static ArrayList<Points> clears = new ArrayList<>();
+    public static Points squarePoints = new Points(x, y);
+    public static Points FSquarePoints = new Points(x, y);
+    public static Points circlePoints = new Points(x, y);
+    public static Points FCirclePoints = new Points(x, y);
+    public static Points p = new Points(x1, x2, y1, y2);
+    JPanel jpComponent;
+    JMenuBar jmb;
+    JMenu color_m, shape, clear, exit;
+    JMenuItem color_sbm, line_sbm, square_sbm, msquare_sbm, circle_sbm, mcircle_sbm, clear_sbm, exit_sbm;
+    public javax.swing.JLabel attandanceLabel;
+    public javax.swing.JTextArea attandanceTextArea;
+    public javax.swing.JButton btnStart;
+    public javax.swing.JButton btnStop;
+    public javax.swing.JComboBox cboxMin;
+    public javax.swing.JComboBox cboxSec;
+    public javax.swing.JTextArea chatTextArea;
+    public javax.swing.JTextField chatTextField;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    public javax.swing.JLabel lblMin;
+    public javax.swing.JLabel lblSec;
+    public javax.swing.JButton sendButton;
+    public javax.swing.JLabel shapesLabel;
+    private javax.swing.JTextArea shapesTextArea;
 
 }
 
