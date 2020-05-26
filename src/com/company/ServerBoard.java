@@ -1,7 +1,5 @@
 package com.company;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -11,97 +9,83 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class ServerBoard extends JFrame implements ActionListener,
-        KeyListener,
-        MouseListener,
-        MouseMotionListener {
-
-    public static int min,sec;
-    Timer timer;
-    boolean flag_for_clock = true;
-    public static ArrayList<Boolean> handInfos = new ArrayList<>();
+public class ServerBoard extends JFrame implements ActionListener, MouseListener {
 
     public ServerBoard() {
         super("Teacher Screen");
-        bl = new BorderLayout();
-        setLayout(bl);
-        menu();
+        borderLayout = new BorderLayout();
+        setLayout(borderLayout);
+        theMenuBar();
         Components();
 
         for (int i = 0; i < 60; i++) {
-            if(i<10){
-                cboxMin.addItem("0"+i);
-            }else{
-                cboxMin.addItem(i);
+            if (i < 10) {
+                minComboBox.addItem("0" + i);
+            } else {
+                minComboBox.addItem(i);
             }
 
         }
         for (int i = 0; i < 60; i++) {
-            if(i<10){
-                cboxSec.addItem("0"+i);
-            }else{
-                cboxSec.addItem(i);
+            if (i < 10) {
+                secComboBox.addItem("0" + i);
+            } else {
+                secComboBox.addItem(i);
             }
         }
     }
 
+    public void theMenuBar() {
+        jMenuBar = new JMenuBar();
 
-
-    public void menu() {
-        jmb = new JMenuBar();
-
-        color_m = new JMenu("Color");
+        colorMenu = new JMenu("Color");
         shape = new JMenu("Shape");
         clear = new JMenu("Clear");
         exit = new JMenu("Exit");
 
-        color_sbm = new JMenuItem("Color Chooser");
-        color_sbm.addActionListener(this);
+        colorSubMenu = new JMenuItem("Color Chooser");
+        colorSubMenu.addActionListener(this);
 
-        square_sbm = new JMenuItem("Square");
-        square_sbm.addActionListener(this);
+        squareSubMenu = new JMenuItem("Square");
+        squareSubMenu.addActionListener(this);
 
-        msquare_sbm = new JMenuItem("Multiple Square");
-        msquare_sbm.addActionListener(this);
+        msquareSubMenu = new JMenuItem("Multiple Square");
+        msquareSubMenu.addActionListener(this);
 
-        circle_sbm = new JMenuItem("Circle");
-        circle_sbm.addActionListener(this);
+        circleSubMenu = new JMenuItem("Circle");
+        circleSubMenu.addActionListener(this);
 
-        mcircle_sbm = new JMenuItem("Multiple Circle");
-        mcircle_sbm.addActionListener(this);
+        mcircleSubMenu = new JMenuItem("Multiple Circle");
+        mcircleSubMenu.addActionListener(this);
 
-        line_sbm = new JMenuItem("Line");
-        line_sbm.addActionListener(this);
+        lineSubMenu = new JMenuItem("Line");
+        lineSubMenu.addActionListener(this);
 
-        clear_sbm = new JMenuItem("Clear The Screen");
-        clear_sbm.addActionListener(this);
+        clearSubMenu = new JMenuItem("Clear The Screen");
+        clearSubMenu.addActionListener(this);
 
-        exit_sbm = new JMenuItem("Close App");
-        exit_sbm.addActionListener(this);
+        exitSubMenu = new JMenuItem("Close App");
+        exitSubMenu.addActionListener(this);
 
-        addKeyListener(this);
-
-        color_m.add(color_sbm);
-        shape.add(square_sbm);
-        shape.add(msquare_sbm);
-        shape.add(circle_sbm);
-        shape.add(mcircle_sbm);
-        shape.add(line_sbm);
-        clear.add(clear_sbm);
-        exit.add(exit_sbm);
+        colorMenu.add(colorSubMenu);
+        shape.add(squareSubMenu);
+        shape.add(msquareSubMenu);
+        shape.add(circleSubMenu);
+        shape.add(mcircleSubMenu);
+        shape.add(lineSubMenu);
+        clear.add(clearSubMenu);
+        exit.add(exitSubMenu);
 
 
-        jmb.add(color_m);
-        jmb.add(shape);
-        jmb.add(clear);
-        jmb.add(exit);
+        jMenuBar.add(colorMenu);
+        jMenuBar.add(shape);
+        jMenuBar.add(clear);
+        jMenuBar.add(exit);
 
-        add(jmb);
-        setJMenuBar(jmb);
+        add(jMenuBar);
+        setJMenuBar(jMenuBar);
 
     }
 
@@ -110,23 +94,22 @@ public class ServerBoard extends JFrame implements ActionListener,
         jpComponent.addMouseListener(this);
 
         jpComponent.setBackground(new java.awt.Color(255, 255, 255));
-        jScrollPane1 = new javax.swing.JScrollPane();
+        JScrollPane jScrollPane1 = new JScrollPane();
         chatTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
-        btnStart = new javax.swing.JButton();
+        buttonStart = new javax.swing.JButton();
         attandanceLabel = new javax.swing.JLabel();
         shapesLabel = new javax.swing.JLabel();
         chatTextField = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        JScrollPane jScrollPane2 = new JScrollPane();
         attandanceTextArea = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        JScrollPane jScrollPane3 = new JScrollPane();
         shapesTextArea = new javax.swing.JTextArea();
-        lblSec = new javax.swing.JLabel();
-        lblMin = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        cboxSec = new javax.swing.JComboBox<>();
-        cboxMin = new javax.swing.JComboBox();
-
+        secLabel = new javax.swing.JLabel();
+        minLabel = new javax.swing.JLabel();
+        JLabel jLabel3 = new JLabel();
+        secComboBox = new javax.swing.JComboBox<>();
+        minComboBox = new javax.swing.JComboBox();
 
 
         javax.swing.GroupLayout jpComponentLayout = new javax.swing.GroupLayout(jpComponent);
@@ -146,18 +129,10 @@ public class ServerBoard extends JFrame implements ActionListener,
         jScrollPane1.setViewportView(chatTextArea);
 
         sendButton.setText("Send");
-        sendButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sendButtonActionPerformed(evt);
-            }
-        });
+        sendButton.addActionListener(evt -> sendButtonActionPerformed());
 
-        btnStart.setText("START");
-        btnStart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStartActionPerformed(evt);
-            }
-        });
+        buttonStart.setText("START");
+        buttonStart.addActionListener(evt -> btnStartActionPerformed());
 
         attandanceLabel.setText("Attandance");
 
@@ -174,26 +149,22 @@ public class ServerBoard extends JFrame implements ActionListener,
         shapesTextArea.setRows(5);
         jScrollPane3.setViewportView(shapesTextArea);
 
-        lblSec.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
-        lblSec.setText("00");
+        secLabel.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        secLabel.setText("00");
 
-        lblMin.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
-        lblMin.setText("00");
+        minLabel.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        minLabel.setText("00");
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
         jLabel3.setText(":");
 
-        cboxSec.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
-        cboxSec.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboxSecActionPerformed(evt);
-            }
-        });
+        secComboBox.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        secComboBox.addActionListener(evt -> cboxSecActionPerformed());
 
-        cboxMin.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
-        cboxMin.addActionListener(new java.awt.event.ActionListener() {
+        minComboBox.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        minComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboxMinActionPerformed(evt);
+                cboxMinActionPerformed();
             }
         });
 
@@ -209,22 +180,22 @@ public class ServerBoard extends JFrame implements ActionListener,
                                         .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(chatTextField)
                                         .addComponent(jScrollPane1)
-                                        .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(buttonStart, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(attandanceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(shapesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jScrollPane2)
                                         .addComponent(jScrollPane3)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(10, 10, 10)
-                                                .addComponent(lblMin)
+                                                .addComponent(minLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lblSec)
+                                                .addComponent(secLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                                                .addComponent(cboxMin, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(minComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(cboxSec, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(secComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -242,13 +213,13 @@ public class ServerBoard extends JFrame implements ActionListener,
                                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(lblSec, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(lblMin, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(secLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(minLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(cboxSec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(cboxMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(secComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(minComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(btnStart)
+                                                .addComponent(buttonStart)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -262,110 +233,106 @@ public class ServerBoard extends JFrame implements ActionListener,
         pack();
     }
 
-    private void sendButtonActionPerformed(ActionEvent evt) {
+    private void sendButtonActionPerformed() {
         message.message = "Teacher: " + chatTextField.getText();
-        chatTextArea.append("\n"+message.message);
+        chatTextArea.append("\n" + message.message);
         message.shapeName = "Msg";
         messages.add(message);
-        sendList(message.shapeName);
+        sendTheInformationList(message.shapeName);
         chatTextField.setText("");
     }
 
-    private void cboxMinActionPerformed(java.awt.event.ActionEvent evt) {
-        lblMin.setText(""+cboxMin.getSelectedItem());
-        min = Integer.parseInt(lblMin.getText());
+    private void cboxMinActionPerformed() {
+        minLabel.setText("" + minComboBox.getSelectedItem());
+        minute = Integer.parseInt(minLabel.getText());
     }
 
-    private void cboxSecActionPerformed(java.awt.event.ActionEvent evt) {
-        lblSec.setText(""+cboxSec.getSelectedItem());
-        sec = Integer.parseInt(lblSec.getText());
+    private void cboxSecActionPerformed() {
+        secLabel.setText("" + secComboBox.getSelectedItem());
+        second = Integer.parseInt(secLabel.getText());
     }
 
-
-
-    private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {
-        time.min=min;
-        time.sec=sec;
-        time.shapeName="Time";
+    private void btnStartActionPerformed() {
+        time.min = minute;
+        time.sec = second;
+        time.shapeName = "Time";
         times.add(time);
         for (int i = 0; i < times.size(); i++) {
-            sendList("Time");
+            sendTheInformationList("Time");
         }
 
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                lblMin.setForeground(Color.black);
-                lblSec.setForeground(Color.black);
+        timer = new Timer(1000, e -> {
+            minLabel.setForeground(Color.black);
+            secLabel.setForeground(Color.black);
 
-                if(sec == 0){
-                    sec=60;
-                    min--;
-                }
-                if(min ==0){
-                    lblMin.setForeground(Color.red);
-                    lblSec.setForeground(Color.red);
-
-                }
-                if(min <0){
-                    JOptionPane.showMessageDialog(rootPane,"Time is Over","Stopped",0);
-                    closeConn();
-                    min=0;sec=0;
-                    timer.stop();
-                }else{
-
-                    sec--;
-                    if(sec<10){
-                        lblSec.setText("0"+sec);
-                        flag_for_clock = false;
-                    }
-                    if(min<10){
-                        lblMin.setText("0"+min);
-                        if(sec<10){
-                            lblSec.setText("0"+sec);
-                        }else{
-                            lblSec.setText(""+sec);
-                        }
-                        flag_for_clock=false;
-                    }
-                    if(flag_for_clock){
-                        lblMin.setText(""+min);
-                        lblSec.setText(""+sec);
-                    }
-
-                }
-
+            if (second == 0) {
+                second = 60;
+                minute--;
+            }
+            if (minute == 0) {
+                minLabel.setForeground(Color.red);
+                secLabel.setForeground(Color.red);
 
             }
+            if (minute < 0) {
+                JOptionPane.showMessageDialog(rootPane, "Time is Over", "Stopped", JOptionPane.ERROR_MESSAGE);
+                terminateTheConnection();
+                minute = 0;
+                second = 0;
+                timer.stop();
+            } else {
+
+                second--;
+                if (second < 10) {
+                    secLabel.setText("0" + second);
+                    flag_for_clock = false;
+                }
+                if (minute < 10) {
+                    minLabel.setText("0" + minute);
+                    if (second < 10) {
+                        secLabel.setText("0" + second);
+                    } else {
+                        secLabel.setText("" + second);
+                    }
+                    flag_for_clock = false;
+                }
+                if (flag_for_clock) {
+                    minLabel.setText("" + minute);
+                    secLabel.setText("" + second);
+                }
+
+            }
+
+
         });
         timer.start();
     }
 
-    public static void writeShapeCounter(int numberOfShapes){
-        if(numberOfShapes<=1){
-            shapesTextArea.setText(numberOfShapes + " " + draw_type +" is drawed");
+    public static void writeShapeCounter(int numberOfShapes) {
+        if (numberOfShapes <= 1) {
+            shapesTextArea.setText(numberOfShapes + " " + draw_type + " is drawed");
 
-        }else{
-            shapesTextArea.setText(numberOfShapes +" "+ draw_type +" are drawed");
+        } else {
+            shapesTextArea.setText(numberOfShapes + " " + draw_type + " are drawed");
 
         }
 
     }
 
-    public void runServer() {
+    public void startTheServer() {
         try {
             sendButton.setEnabled(false);
-            server = new ServerSocket(12345, 100);
+            serverSocket = new ServerSocket(12345, 100);
 
             while (true) {
                 try {
-                    waitConn();
-                    streams();
-                    processConn();
+                    listenTheConnection();
+                    establishTheConnection();
+                    serverListenTheConnection();
                 } catch (EOFException e) {
-                    dispMessage("\nServer Terminated Conn\n");
+                    displayTheMessage("\nServer Terminated Conn\n");
                 } finally {
-                    closeConn();
+                    terminateTheConnection();
                 }
             }
         } catch (IOException e) {
@@ -373,112 +340,98 @@ public class ServerBoard extends JFrame implements ActionListener,
         }
     }
 
-    public void waitConn() throws IOException {
-        dispMessage("Please Wait...\n");
-        conn = server.accept();
-        dispMessage("Connection Received\n");
+    public void listenTheConnection() throws IOException {
+        displayTheMessage("Please Wait...\n");
+        socket = serverSocket.accept();
+        displayTheMessage("Connection Received\n");
     }
 
-    public void streams() throws IOException {
-        oos = new ObjectOutputStream(conn.getOutputStream());
-        oos.flush();
+    public void establishTheConnection() throws IOException {
+        objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        objectOutputStream.flush();
 
-        ois = new ObjectInputStream(conn.getInputStream());
-        dispMessage("\nConnected.\n");
+        objectInputStream = new ObjectInputStream(socket.getInputStream());
+        displayTheMessage("\nChat Activated.\n");
     }
 
-    public void processConn() throws IOException {
+    public void serverListenTheConnection() throws IOException {
         //send("Successful");
-        setButtonEnabled(true);
+        sendButtonEnabler(true);
         //String msg = "";
 
         do {
             try {
                 //msg = (String) ois.readObject();
                 //dispMessage("\n" + msg);
-                infos = (ArrayList<Points>) ois.readObject();
-                for (Points info : infos) {
-                    if(info.shapeName.equals("Msg")){
-                        dispMessage(info.message);
-                    }else if(info.shapeName.equals("Hand")){
-                        JOptionPane.showMessageDialog(rootPane,"Student raised his/her hand","Hand",JOptionPane.INFORMATION_MESSAGE);
+                infos = (ArrayList<Informations>) objectInputStream.readObject();
+                for (Informations info : infos) {
+                    if (info.shapeName.equals("Msg")) {
+                        displayTheMessage(info.message);
+                    } else if (info.shapeName.equals("Hand")) {
+                        JOptionPane.showMessageDialog(rootPane, "Student raised his/her hand", "Hand", JOptionPane.INFORMATION_MESSAGE);
 
                     }
                 }
 
             } catch (ClassNotFoundException e) {
-                dispMessage("Unknown");
+                displayTheMessage("Unknown");
             }
         } while (true/*!msg.equals("C:ExitTheSystem")*/);
     }
 
-    public void closeConn() {
-        dispMessage("\nTerminating Conn\n");
-        setButtonEnabled(false);
-
-        try {
-            oos.close();
-            ois.close();
-            conn.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public static void sendList(String shapeName) {
+    public static void sendTheInformationList(String shapeName) {
         try {
 
             switch (shapeName) {
                 case "Square":
-                    oos.reset();
-                    oos.writeObject(square);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(square);
+                    objectOutputStream.flush();
                     break;
                 case "FSquare":
-                    oos.reset();
-                    oos.writeObject(FSquare);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(FSquare);
+                    objectOutputStream.flush();
                     break;
                 case "FCircle":
-                    oos.reset();
-                    oos.writeObject(FCircle);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(FCircle);
+                    objectOutputStream.flush();
                     break;
                 case "Circle":
-                    oos.reset();
-                    oos.writeObject(circle);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(circle);
+                    objectOutputStream.flush();
                     break;
                 case "Line":
-                    oos.reset();
-                    oos.writeObject(line);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(line);
+                    objectOutputStream.flush();
                     break;
                 case "MSquare":
-                    oos.reset();
-                    oos.writeObject(squares);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(squares);
+                    objectOutputStream.flush();
                     break;
                 case "MCircle":
-                    oos.reset();
-                    oos.writeObject(circles);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(circles);
+                    objectOutputStream.flush();
                     break;
                 case "Clear":
-                    oos.reset();
-                    oos.writeObject(clears);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(clears);
+                    objectOutputStream.flush();
                     break;
                 case "Time":
-                    oos.reset();
-                    oos.writeObject(times);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(times);
+                    objectOutputStream.flush();
                     break;
                 case "Msg":
-                    oos.reset();
-                    oos.writeObject(messages);
-                    oos.flush();
+                    objectOutputStream.reset();
+                    objectOutputStream.writeObject(messages);
+                    objectOutputStream.flush();
                     break;
             }
 
@@ -487,54 +440,58 @@ public class ServerBoard extends JFrame implements ActionListener,
         }
     }
 
+    public void terminateTheConnection() {
+        displayTheMessage("\nTerminating Conn\n");
+        sendButtonEnabler(false);
 
-    public static void dispMessage(final String string) {
-        chatTextArea.append("\n"+string);
+        try {
+            objectOutputStream.close();
+            objectInputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setButtonEnabled(final boolean b) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                sendButton.setEnabled(b);
-
-            }
-        });
+    public static void displayTheMessage(final String string) {
+        chatTextArea.append("\n" + string);
     }
 
+    public void sendButtonEnabler(final boolean b) {
+        SwingUtilities.invokeLater(() -> sendButton.setEnabled(b));
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
 
         switch (draw_type) {
             case "Square":
-                squarePoints.x = e.getX();
-                squarePoints.y = e.getY();
-                squarePoints.shapeName = "Square";
-                square.add(squarePoints);
+                squareInformations.x = e.getX();
+                squareInformations.y = e.getY();
+                squareInformations.shapeName = "Square";
+                square.add(squareInformations);
                 break;
             case "Circle":
-                circlePoints.x = e.getX();
-                circlePoints.y = e.getY();
-                circlePoints.shapeName = "Circle";
-                circle.add(circlePoints);
+                circleInformations.x = e.getX();
+                circleInformations.y = e.getY();
+                circleInformations.shapeName = "Circle";
+                circle.add(circleInformations);
 
                 break;
             case "FSquare":
-                FSquarePoints.x = e.getX();
-                FSquarePoints.y = e.getY();
-                FSquarePoints.shapeName = "FSquare";
-                FSquare.add(FSquarePoints);
+                FSquareInformations.x = e.getX();
+                FSquareInformations.y = e.getY();
+                FSquareInformations.shapeName = "FSquare";
+                FSquare.add(FSquareInformations);
                 break;
             case "FCircle":
-                FCirclePoints.x = e.getX();
-                FCirclePoints.y = e.getY();
-                FCirclePoints.shapeName = "FCircle";
-                FCircle.add(FCirclePoints);
+                FCircleInformations.x = e.getX();
+                FCircleInformations.y = e.getY();
+                FCircleInformations.shapeName = "FCircle";
+                FCircle.add(FCircleInformations);
                 break;
             case "MSquare": {
-                Points p = new Points(x, y);
+                Informations p = new Informations(x, y);
                 p.x = e.getX();
                 p.y = e.getY();
                 p.shapeName = "MSquare";
@@ -543,7 +500,7 @@ public class ServerBoard extends JFrame implements ActionListener,
                 break;
             }
             case "MCircle": {
-                Points p = new Points(x, y);
+                Informations p = new Informations(x, y);
                 p.x = e.getX();
                 p.y = e.getY();
                 p.shapeName = "MCircle";
@@ -552,7 +509,7 @@ public class ServerBoard extends JFrame implements ActionListener,
                 break;
             }
             case "Clear": {
-                Points p = new Points(x, y);
+                Informations p = new Informations(x, y);
                 p.x = 100;
                 p.y = 100;
                 p.shapeName = "Clear";
@@ -568,18 +525,6 @@ public class ServerBoard extends JFrame implements ActionListener,
             }
         }
         repaint();
-
-    }
-
-
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
 
     }
 
@@ -617,31 +562,14 @@ public class ServerBoard extends JFrame implements ActionListener,
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == color_sbm) {
+        if (e.getSource() == colorSubMenu) {
 
-            c = JColorChooser.showDialog(this, "Choose Color", Color.red);
+            color = JColorChooser.showDialog(this, "Choose Color", Color.red);
             repaint();
-        } else if (e.getSource() == line_sbm) {
+        } else if (e.getSource() == lineSubMenu) {
             draw_type = "Line";
-        } else if (e.getSource() == square_sbm) {
+        } else if (e.getSource() == squareSubMenu) {
             draw_type = "Square";
             type_for_square = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Square\n2- Fill Square"));
             if (type_for_square == 2) {
@@ -650,9 +578,9 @@ public class ServerBoard extends JFrame implements ActionListener,
                 draw_type = "Square";
             }
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Square");
-        } else if (e.getSource() == msquare_sbm) {
+        } else if (e.getSource() == msquareSubMenu) {
             draw_type = "MSquare";
-        } else if (e.getSource() == circle_sbm) {
+        } else if (e.getSource() == circleSubMenu) {
             draw_type = "Circle";
             type_for_circle = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Circle\n2- Fill Circle"));
             if (type_for_circle == 2) {
@@ -661,67 +589,69 @@ public class ServerBoard extends JFrame implements ActionListener,
                 draw_type = "Circle";
             }
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Circle");
-        } else if (e.getSource() == mcircle_sbm) {
+        } else if (e.getSource() == mcircleSubMenu) {
             draw_type = "MCircle";
-        } else if (e.getSource() == clear_sbm) {
+        } else if (e.getSource() == clearSubMenu) {
             draw_type = "Clear";
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Clear The Screen");
 
-        } else if (e.getSource() == exit_sbm) {
+        } else if (e.getSource() == exitSubMenu) {
             System.exit(0);
         }
 
     }
 
-    BorderLayout bl;
-    protected static Color c;
+    //Variables
+    public static int minute, second;
+    Timer timer;
+    boolean flag_for_clock = true;
+    BorderLayout borderLayout;
+    protected static Color color;
     protected static int x, x1, x2;
     protected static int y, y1, y2;
     public static String draw_type = "Empty";
     public static int type_for_square = 0;
     public static int type_for_circle = 0;
-    public static ObjectOutputStream oos;
-    public static ObjectInputStream ois;
-    public static ServerSocket server;
-    public static Socket conn;
-    public static ArrayList<Points> infos = new ArrayList<>();
-    public static ArrayList<Points> line = new ArrayList<>();
-    public static ArrayList<Points> square = new ArrayList<>();
-    public static ArrayList<Points> FSquare = new ArrayList<>();
-    public static ArrayList<Points> circle = new ArrayList<>();
-    public static ArrayList<Points> FCircle = new ArrayList<>();
-    public static ArrayList<Points> squares = new ArrayList<>();
-    public static ArrayList<Points> circles = new ArrayList<>();
-    public static ArrayList<Points> clears = new ArrayList<>();
-    public static ArrayList<Points> times = new ArrayList<>();
-    public static ArrayList<Points> messages = new ArrayList<>();
-    public static Points message = new Points("message","shapename");
-    public static Points time=new Points(min,sec,"time");
-    public static Points squarePoints = new Points(x, y);
-    public static Points FSquarePoints = new Points(x, y);
-    public static Points circlePoints = new Points(x, y);
-    public static Points FCirclePoints = new Points(x, y);
-    public static Points p = new Points(x1, x2, y1, y2);
+    public static ObjectOutputStream objectOutputStream;
+    public static ObjectInputStream objectInputStream;
+    public static ServerSocket serverSocket;
+    public static Socket socket;
+    public static ArrayList<Informations> infos = new ArrayList<>();
+    public static ArrayList<Informations> line = new ArrayList<>();
+    public static ArrayList<Informations> square = new ArrayList<>();
+    public static ArrayList<Informations> FSquare = new ArrayList<>();
+    public static ArrayList<Informations> circle = new ArrayList<>();
+    public static ArrayList<Informations> FCircle = new ArrayList<>();
+    public static ArrayList<Informations> squares = new ArrayList<>();
+    public static ArrayList<Informations> circles = new ArrayList<>();
+    public static ArrayList<Informations> clears = new ArrayList<>();
+    public static ArrayList<Informations> times = new ArrayList<>();
+    public static ArrayList<Informations> messages = new ArrayList<>();
+    public static Informations message = new Informations("message", "shapename");
+    public static Informations time = new Informations(minute, second, "time");
+    public static Informations squareInformations = new Informations(x, y);
+    public static Informations FSquareInformations = new Informations(x, y);
+    public static Informations circleInformations = new Informations(x, y);
+    public static Informations FCircleInformations = new Informations(x, y);
+    public static Informations p = new Informations(x1, x2, y1, y2);
     JPanel jpComponent;
-    JMenuBar jmb;
-    JMenu color_m, shape, clear, exit;
-    JMenuItem color_sbm, line_sbm, square_sbm, msquare_sbm, circle_sbm, mcircle_sbm, clear_sbm, exit_sbm;
+    JMenuBar jMenuBar;
+    JMenu colorMenu, shape, clear, exit;
+    JMenuItem colorSubMenu, lineSubMenu, squareSubMenu, msquareSubMenu, circleSubMenu, mcircleSubMenu, clearSubMenu, exitSubMenu;
     public javax.swing.JLabel attandanceLabel;
     public javax.swing.JTextArea attandanceTextArea;
-    public javax.swing.JButton btnStart;
-    public javax.swing.JComboBox cboxMin;
-    public javax.swing.JComboBox cboxSec;
+    public javax.swing.JButton buttonStart;
+    public javax.swing.JComboBox minComboBox;
+    public javax.swing.JComboBox secComboBox;
     public static javax.swing.JTextArea chatTextArea;
     public javax.swing.JTextField chatTextField;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    public javax.swing.JLabel lblMin;
-    public javax.swing.JLabel lblSec;
+    public javax.swing.JLabel minLabel;
+    public javax.swing.JLabel secLabel;
     public javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
     static public javax.swing.JTextArea shapesTextArea;
+    //End
+
 
 }
 

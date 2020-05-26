@@ -10,6 +10,6 @@ public class Server {
         serverBoard.setVisible(true);
         serverBoard.setSize(1080, 720);
         serverBoard.setResizable(false);
-        serverBoard.runServer();
+        serverBoard.startTheServer();
     }
 }
