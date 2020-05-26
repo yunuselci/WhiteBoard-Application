@@ -9,7 +9,7 @@ public class ServerPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.setColor(ServerBoard.color);
+
 
         if (ServerBoard.draw_type.equals("Square")) {
             ++shapeCounter;

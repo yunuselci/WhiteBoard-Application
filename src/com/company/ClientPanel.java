@@ -64,12 +64,14 @@ public class ClientPanel extends JPanel {
                 g.fillRect(100, 100, getSize().width, getSize().height);
                 shapeCounter = 0;
                 ClientBoard.writeShapeCounter(shapeCounter);
+                break;
             case "Time":
                 for (int i = 0; i < ClientBoard.infos.size(); i++) {
                     ClientBoard.min = ClientBoard.infos.get(i).min;
                     ClientBoard.sec = ClientBoard.infos.get(i).sec;
                 }
                 ClientBoard.displayTime();
+                break;
 
         }
 

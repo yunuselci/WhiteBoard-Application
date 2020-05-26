@@ -42,13 +42,11 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     public void theMenuBar() {
         jMenuBar = new JMenuBar();
 
-        colorMenu = new JMenu("Color");
+
         shape = new JMenu("Shape");
         clear = new JMenu("Clear");
         exit = new JMenu("Exit");
 
-        colorSubMenu = new JMenuItem("Color Chooser");
-        colorSubMenu.addActionListener(this);
 
         squareSubMenu = new JMenuItem("Square");
         squareSubMenu.addActionListener(this);
@@ -71,7 +69,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         exitSubMenu = new JMenuItem("Close App");
         exitSubMenu.addActionListener(this);
 
-        colorMenu.add(colorSubMenu);
+
         shape.add(squareSubMenu);
         shape.add(msquareSubMenu);
         shape.add(circleSubMenu);
@@ -81,7 +79,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         exit.add(exitSubMenu);
 
 
-        jMenuBar.add(colorMenu);
+
         jMenuBar.add(shape);
         jMenuBar.add(clear);
         jMenuBar.add(exit);
@@ -151,19 +149,19 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         shapesTextArea.setRows(5);
         jScrollPane3.setViewportView(shapesTextArea);
 
-        secLabel.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        secLabel.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
         secLabel.setText("00");
 
-        minLabel.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        minLabel.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
         minLabel.setText("00");
 
-        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
         jLabel3.setText(":");
 
-        secComboBox.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        secComboBox.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
         secComboBox.addActionListener(evt -> cboxSecActionPerformed());
 
-        minComboBox.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
+        minComboBox.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
         minComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboxMinActionPerformed();
@@ -425,17 +423,27 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
                 infos = (ArrayList<Informations>) objectInputStream.readObject();
                 for (Informations info : infos) {
                     if (info.shapeName.equals("Msg")) {
-                        displayTheMessage(info.message);
+                        isMessageRecieved=true;
+                        isRaiseHand=false;
                     } else if (info.shapeName.equals("Hand")) {
-                        JOptionPane.showMessageDialog(rootPane, "Student raised his/her hand", "Hand", JOptionPane.INFORMATION_MESSAGE);
-
+                        isRaiseHand=true;
+                        isMessageRecieved=false;
                     }
+                }
+                if(isMessageRecieved){
+                    isRaiseHand=false;
+                    displayTheMessage(infos.get(0).message);
+                }
+                if(isRaiseHand){
+                    isMessageRecieved =false;
+                    JOptionPane.showMessageDialog(rootPane, "Student raised his/her hand", "Hand", JOptionPane.INFORMATION_MESSAGE);
+
                 }
 
             } catch (ClassNotFoundException e) {
                 displayTheMessage("Unknown");
             }
-        } while (true/*!msg.equals("C:ExitTheSystem")*/);
+        } while (true);
     }
 
     public static void sendTheInformationList(String shapeName) {
@@ -574,13 +582,13 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
                 p.x = 100;
                 p.y = 100;
                 p.shapeName = "Clear";
-                square.clear();
+                //square.clear();-make bugs
                 squares.clear();
-                line.clear();
-                circle.clear();
+                //line.clear();-make bugs
+                //circle.clear();-make bugs
                 circles.clear();
-                FSquare.clear();
-                FCircle.clear();
+                //FSquare.clear();-make bugs
+                //FCircle.clear();-make bugs
                 clears.add(p);
                 break;
             }
@@ -624,11 +632,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == colorSubMenu) {
-
-            color = JColorChooser.showDialog(this, "Choose Color", Color.red);
-            repaint();
-        } else if (e.getSource() == lineSubMenu) {
+         if (e.getSource() == lineSubMenu) {
             draw_type = "Line";
         } else if (e.getSource() == squareSubMenu) {
             draw_type = "Square";
@@ -667,14 +671,13 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     Timer timer;
     boolean flag_for_clock = true;
     BorderLayout borderLayout;
-    protected static Color color;
     protected static int x, x1, x2;
     protected static int y, y1, y2;
     public static String draw_type = "Empty";
     public static int type_for_square = 0;
     public static int type_for_circle = 0;
-    public static ObjectOutputStream objectOutputStream;
-    public static ObjectInputStream objectInputStream;
+        public static ObjectOutputStream objectOutputStream;
+        public static ObjectInputStream objectInputStream;
     public static ServerSocket serverSocket;
     public static Socket socket;
     public static ArrayList<Informations> infos = new ArrayList<>();
@@ -697,8 +700,8 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     public static Informations p = new Informations(x1, x2, y1, y2);
     JPanel jpComponent;
     JMenuBar jMenuBar;
-    JMenu colorMenu, shape, clear, exit;
-    JMenuItem colorSubMenu, lineSubMenu, squareSubMenu, msquareSubMenu, circleSubMenu, mcircleSubMenu, clearSubMenu, exitSubMenu;
+    JMenu  shape, clear, exit;
+    JMenuItem lineSubMenu, squareSubMenu, msquareSubMenu, circleSubMenu, mcircleSubMenu, clearSubMenu, exitSubMenu;
     public javax.swing.JLabel attandanceLabel;
     public javax.swing.JTextArea attandanceTextArea;
     public javax.swing.JButton buttonStart;
@@ -711,6 +714,8 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     public javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
     static public javax.swing.JTextArea shapesTextArea;
+    public boolean isMessageRecieved = false;
+    public boolean isRaiseHand = false;
     //End
 }
 

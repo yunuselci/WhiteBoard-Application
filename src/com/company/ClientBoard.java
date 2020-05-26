@@ -343,39 +343,52 @@ public class ClientBoard extends JFrame implements ActionListener {
                 for (Informations info : infos) {
                     switch (info.shapeName) {
                         case "Square":
+                            isMessageRecieved=false;
                             drawType = "Square";
                             break;
                         case "FSquare":
+                            isMessageRecieved=false;
                             drawType = "FSquare";
                             break;
                         case "FCircle":
+                            isMessageRecieved=false;
                             drawType = "FCircle";
                             break;
                         case "Circle":
+                            isMessageRecieved=false;
                             drawType = "Circle";
                             break;
                         case "Line":
+                            isMessageRecieved=false;
                             drawType = "Line";
                             break;
                         case "MSquare":
+                            isMessageRecieved=false;
                             drawType = "MSquare";
                             break;
                         case "MCircle":
+                            isMessageRecieved=false;
                             drawType = "MCircle";
                             break;
                         case "Clear":
+                            isMessageRecieved=false;
                             drawType = "Clear";
                             break;
                         case "Time":
+                            isMessageRecieved=false;
                             drawType = "Time";
                             break;
                         case "Msg":
-                            displayTheMessage(info.message);
+                            isMessageRecieved=true;
                             break;
                     }
 
                 }
                 repaint();
+                if(isMessageRecieved){
+                    displayTheMessage(infos.get(0).message);
+                }
+
             } catch (ClassNotFoundException e) {
                 displayTheMessage("Unknown");
             }
@@ -465,5 +478,6 @@ public class ClientBoard extends JFrame implements ActionListener {
     public javax.swing.JLabel shapesLabel;
     public static javax.swing.JTextArea shapesTextArea;
     public javax.swing.JButton riseHand;
+    public static boolean isMessageRecieved = false;
 
 }
