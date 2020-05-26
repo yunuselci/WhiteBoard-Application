@@ -3,12 +3,12 @@ package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 public class ServerBoard extends JFrame implements ActionListener, MouseListener {
@@ -19,6 +19,8 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         setLayout(borderLayout);
         theMenuBar();
         Components();
+        attandanceFileCreate();
+        clearTheAttandance();
 
         for (int i = 0; i < 60; i++) {
             if (i < 10) {
@@ -275,6 +277,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
             }
             if (minute < 0) {
+                attandanceTextArea.setText("");
                 JOptionPane.showMessageDialog(rootPane, "Time is Over", "Stopped", JOptionPane.ERROR_MESSAGE);
                 terminateTheConnection();
                 minute = 0;
@@ -306,6 +309,61 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
         });
         timer.start();
+    }
+
+    private void attandanceFileCreate(){
+        try {
+            File myObj = new File("attandance.txt");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    private void attandanceFileWrite(String attandance){
+        try {
+            Files.write(Paths.get("attandance.txt"), attandance.getBytes(), StandardOpenOption.APPEND);
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    private void readAttandance(){
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(
+                    "C:\\Users\\Yunus\\IntellijIdeaProjects\\yunus_berkay\\attandance.txt"));
+            String line = reader.readLine();
+            while (line != null) {
+                //System.out.println(line);
+                attandanceTextArea.append(line+"\n");
+                // read next line
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearTheAttandance(){
+        try{
+            FileWriter fwOb = new FileWriter("attandance.txt", false);
+            PrintWriter pwOb = new PrintWriter(fwOb, false);
+            pwOb.flush();
+            pwOb.close();
+            fwOb.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
     public static void writeShapeCounter(int numberOfShapes) {
@@ -352,12 +410,13 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
         objectInputStream = new ObjectInputStream(socket.getInputStream());
         displayTheMessage("\nChat Activated.\n");
+        attandanceFileWrite("Teacher\n");
+        displayTheMessage("Teacher has been processed to attandance file\n");
     }
 
     public void serverListenTheConnection() throws IOException {
-        //send("Successful");
         sendButtonEnabler(true);
-        //String msg = "";
+        readAttandance();
 
         do {
             try {
@@ -440,7 +499,9 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         }
     }
 
+
     public void terminateTheConnection() {
+
         displayTheMessage("\nTerminating Conn\n");
         sendButtonEnabler(false);
 
@@ -651,8 +712,6 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     public javax.swing.JLabel shapesLabel;
     static public javax.swing.JTextArea shapesTextArea;
     //End
-
-
 }
 
 

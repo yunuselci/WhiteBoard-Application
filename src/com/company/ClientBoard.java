@@ -5,13 +5,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ClientBoard extends JFrame implements ActionListener {
 
@@ -23,6 +24,9 @@ public class ClientBoard extends JFrame implements ActionListener {
         setLayout(borderLayout);
         theMenuBar();
         Components();
+        attandanceFileCreate();
+        clearTheAttandance();
+
 
 
     }
@@ -169,12 +173,67 @@ public class ClientBoard extends JFrame implements ActionListener {
     }
 
     private void sendButtonActionPerformed() {
-        message.message = "Student: " + chatTextField.getText();
+        message.message = "ID:"+ n +  " Student: " + chatTextField.getText();
         chatTextArea.append("\n" + message.message);
         message.shapeName = "Msg";
         messages.add(message);
         sendTheInformationList(message.shapeName);
         chatTextField.setText("");
+    }
+
+    private void attandanceFileCreate(){
+        try {
+            File myObj = new File("attandance.txt");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    private void attandanceFileWrite(String attandance){
+        try {
+            Files.write(Paths.get("attandance.txt"), attandance.getBytes(), StandardOpenOption.APPEND);
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    private void readAttandance(){
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(
+                    "C:\\Users\\Yunus\\IntellijIdeaProjects\\yunus_berkay\\attandance.txt"));
+            String line = reader.readLine();
+            while (line != null) {
+                //System.out.println(line);
+                attandanceTextArea.append(line+"\n");
+                // read next line
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearTheAttandance(){
+        try{
+            FileWriter fwOb = new FileWriter("attandance.txt", false);
+            PrintWriter pwOb = new PrintWriter(fwOb, false);
+            pwOb.flush();
+            pwOb.close();
+            fwOb.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
     public static void displayTime() {
@@ -193,6 +252,7 @@ public class ClientBoard extends JFrame implements ActionListener {
 
             }
             if (min < 0) {
+                attandanceTextArea.setText("");
                 JOptionPane.showMessageDialog(rootPane, "Time is Over", "Stopped", JOptionPane.ERROR_MESSAGE);
                 terminateTheConnection();
                 min = 0;
@@ -263,16 +323,19 @@ public class ClientBoard extends JFrame implements ActionListener {
         theStudent = new Socket(InetAddress.getByName(serve), 12345);
     }
 
-    public static void establishTheConnection() throws IOException {
+    public void establishTheConnection() throws IOException {
         objectOutputStream = new ObjectOutputStream(theStudent.getOutputStream());
         objectOutputStream.flush();
         objectInputStream = new ObjectInputStream(theStudent.getInputStream());
         displayTheMessage("\nConnected.\n");
+        displayTheMessage("Chat Activated:");
+        attandanceFileWrite("ID:"+ n + " Student\n");
+        displayTheMessage("Student has been processed to attandance file\n");
     }
 
     public void clientListenTheConnection() throws IOException {
         sendButtonEnabler(true);
-        displayTheMessage("Chat Activated:");
+        readAttandance();
         do {
             try {
 
@@ -336,8 +399,8 @@ public class ClientBoard extends JFrame implements ActionListener {
     }
 
     public static void terminateTheConnection() {
-
-        displayTheMessage("\nTerminating Conn\n");
+        attandanceTextArea.setText("");
+        displayTheMessage("\nTerminating the Connection\n");
         sendButtonEnabler(false);
         try {
             objectOutputStream.close();
@@ -380,6 +443,8 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static ArrayList<Informations> infos = new ArrayList<>();
     public static String drawType = "Nothing";
     public static int min, sec;
+    public static int n = 10000 + new Random().nextInt(90000);
+
     public static Timer timer;
     public static boolean flag_for_clock = true;
     public static ArrayList<Informations> messages = new ArrayList<>();
@@ -391,7 +456,7 @@ public class ClientBoard extends JFrame implements ActionListener {
     JMenu exit, hand;
     JMenuItem exitSubMenu, handSubMenu;
     public javax.swing.JLabel attandanceLabel;
-    public javax.swing.JTextArea attandanceTextArea;
+    public static javax.swing.JTextArea attandanceTextArea;
     public static javax.swing.JTextArea chatTextArea;
     public javax.swing.JTextField chatTextField;
     public static javax.swing.JLabel lblMin;
