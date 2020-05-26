@@ -7,6 +7,16 @@ public class Points implements Serializable {
     int y,y1,y2;
     int min,sec;
     String shapeName;
+    String message;
+
+    public Points(String shapeName) {
+        this.shapeName = shapeName;
+    }
+
+    public Points(String message, String shapeName) {
+        this.message = message;
+        this.shapeName = shapeName;
+    }
 
     public Points(int min, int sec, String shapeName) {
         this.min = min;

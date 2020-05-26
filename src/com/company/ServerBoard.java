@@ -108,6 +108,7 @@ public class ServerBoard extends JFrame implements ActionListener,
     public void Components() {
         jpComponent = new ServerPanel();
         jpComponent.addMouseListener(this);
+
         jpComponent.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1 = new javax.swing.JScrollPane();
         chatTextArea = new javax.swing.JTextArea();
@@ -145,6 +146,11 @@ public class ServerBoard extends JFrame implements ActionListener,
         jScrollPane1.setViewportView(chatTextArea);
 
         sendButton.setText("Send");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
 
         btnStart.setText("START");
         btnStart.addActionListener(new java.awt.event.ActionListener() {
@@ -157,11 +163,6 @@ public class ServerBoard extends JFrame implements ActionListener,
 
         shapesLabel.setText("How Many Shapes Drawed");
 
-        chatTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chatTextFieldActionPerformed(evt);
-            }
-        });
 
         attandanceTextArea.setEditable(false);
         attandanceTextArea.setColumns(20);
@@ -261,6 +262,15 @@ public class ServerBoard extends JFrame implements ActionListener,
         pack();
     }
 
+    private void sendButtonActionPerformed(ActionEvent evt) {
+        message.message = "Teacher: " + chatTextField.getText();
+        chatTextArea.append("\n"+message.message);
+        message.shapeName = "Msg";
+        messages.add(message);
+        sendList(message.shapeName);
+        chatTextField.setText("");
+    }
+
     private void cboxMinActionPerformed(java.awt.event.ActionEvent evt) {
         lblMin.setText(""+cboxMin.getSelectedItem());
         min = Integer.parseInt(lblMin.getText());
@@ -271,9 +281,7 @@ public class ServerBoard extends JFrame implements ActionListener,
         sec = Integer.parseInt(lblSec.getText());
     }
 
-    private void chatTextFieldActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
+
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {
         time.min=min;
@@ -301,6 +309,7 @@ public class ServerBoard extends JFrame implements ActionListener,
                 }
                 if(min <0){
                     JOptionPane.showMessageDialog(rootPane,"Time is Over","Stopped",0);
+                    closeConn();
                     min=0;sec=0;
                     timer.stop();
                 }else{
@@ -345,6 +354,7 @@ public class ServerBoard extends JFrame implements ActionListener,
 
     public void runServer() {
         try {
+            sendButton.setEnabled(false);
             server = new ServerSocket(12345, 100);
 
             while (true) {
@@ -379,19 +389,21 @@ public class ServerBoard extends JFrame implements ActionListener,
 
     public void processConn() throws IOException {
         //send("Successful");
-
-        System.out.println("successfull");
-
-        //setButtonEnabled(true);
+        setButtonEnabled(true);
         //String msg = "";
 
         do {
             try {
                 //msg = (String) ois.readObject();
                 //dispMessage("\n" + msg);
-                handInfos = (ArrayList<Boolean>) ois.readObject();
-                if(handInfos.get(0)){
-                    JOptionPane.showMessageDialog(rootPane,"Student raised his/her hand","Stopped",JOptionPane.INFORMATION_MESSAGE);
+                infos = (ArrayList<Points>) ois.readObject();
+                for (Points info : infos) {
+                    if(info.shapeName.equals("Msg")){
+                        dispMessage(info.message);
+                    }else if(info.shapeName.equals("Hand")){
+                        JOptionPane.showMessageDialog(rootPane,"Student raised his/her hand","Hand",JOptionPane.INFORMATION_MESSAGE);
+
+                    }
                 }
 
             } catch (ClassNotFoundException e) {
@@ -463,6 +475,11 @@ public class ServerBoard extends JFrame implements ActionListener,
                     oos.writeObject(times);
                     oos.flush();
                     break;
+                case "Msg":
+                    oos.reset();
+                    oos.writeObject(messages);
+                    oos.flush();
+                    break;
             }
 
         } catch (IOException e) {
@@ -480,7 +497,7 @@ public class ServerBoard extends JFrame implements ActionListener,
 
             @Override
             public void run() {
-                //jbSend.setEnabled(b);
+                sendButton.setEnabled(b);
 
             }
         });
@@ -553,6 +570,7 @@ public class ServerBoard extends JFrame implements ActionListener,
         repaint();
 
     }
+
 
 
     @Override
@@ -666,6 +684,7 @@ public class ServerBoard extends JFrame implements ActionListener,
     public static ObjectInputStream ois;
     public static ServerSocket server;
     public static Socket conn;
+    public static ArrayList<Points> infos = new ArrayList<>();
     public static ArrayList<Points> line = new ArrayList<>();
     public static ArrayList<Points> square = new ArrayList<>();
     public static ArrayList<Points> FSquare = new ArrayList<>();
@@ -675,6 +694,8 @@ public class ServerBoard extends JFrame implements ActionListener,
     public static ArrayList<Points> circles = new ArrayList<>();
     public static ArrayList<Points> clears = new ArrayList<>();
     public static ArrayList<Points> times = new ArrayList<>();
+    public static ArrayList<Points> messages = new ArrayList<>();
+    public static Points message = new Points("message","shapename");
     public static Points time=new Points(min,sec,"time");
     public static Points squarePoints = new Points(x, y);
     public static Points FSquarePoints = new Points(x, y);

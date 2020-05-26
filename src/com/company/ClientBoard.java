@@ -14,19 +14,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientBoard extends JFrame implements ActionListener {
-    private static Component rootPane;
-    BorderLayout bl;
-    public static ObjectOutputStream oos;
-    public static ObjectInputStream ois;
-    public static String srv;
-    public static Socket myClient;
-    public static ArrayList<Points> cordinates = new ArrayList<>();
-    public static String drawType = "Nothing";
-    public static int min,sec;
-    public static Timer timer;
-    public static boolean flag_for_clock = true;
-    public boolean isRiseHand = false;
-    public ArrayList<Boolean> handInformation = new ArrayList<Boolean>();
+
 
     public ClientBoard(String info) {
         super("Student Screen");
@@ -38,11 +26,6 @@ public class ClientBoard extends JFrame implements ActionListener {
 
 
     }
-
-    JPanel jpComponent;
-    JMenuBar jmb;
-    JMenu exit,hand;
-    JMenuItem exit_sbm,hand_sbm;
 
     public void menu() {
         jmb = new JMenuBar();
@@ -58,11 +41,13 @@ public class ClientBoard extends JFrame implements ActionListener {
         jmb.add(exit);
         add(jmb);
         setJMenuBar(jmb);
+
     }
 
     public void Components() {
         jpComponent = new ClientPanel();
         jpComponent.setBackground(Color.white);
+
         jScrollPane1 = new javax.swing.JScrollPane();
         chatTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
@@ -97,6 +82,11 @@ public class ClientBoard extends JFrame implements ActionListener {
         jScrollPane1.setViewportView(chatTextArea);
 
         sendButton.setText("Send");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
 
         attandanceLabel.setText("Attandance");
 
@@ -193,6 +183,15 @@ public class ClientBoard extends JFrame implements ActionListener {
         pack();
     }
 
+    private void sendButtonActionPerformed(ActionEvent evt) {
+        message.message = "Student: " + chatTextField.getText();
+        chatTextArea.append("\n"+message.message);
+        message.shapeName = "Msg";
+        messages.add(message);
+        send(message.shapeName);
+        chatTextField.setText("");
+    }
+
     public static void displayTime(){
 
         timer = new Timer(1000, e -> {
@@ -210,7 +209,7 @@ public class ClientBoard extends JFrame implements ActionListener {
             }
             if (min < 0) {
                 JOptionPane.showMessageDialog(rootPane, "Time is Over", "Stopped", 0);
-
+                closeConn();
                 min = 0;
                 sec = 0;
                 timer.stop();
@@ -251,17 +250,21 @@ public class ClientBoard extends JFrame implements ActionListener {
 
     }
     private void riseHandActionPerformed(java.awt.event.ActionEvent evt) {
-        isRiseHand = true;
-        handInformation.add(true);
-        send();
+        handInfo.shapeName = "Hand";
+        handInfos.add(handInfo);
+        send("Hand");
     }
     private void chatTextFieldActionPerformed(ActionEvent evt) {
     }
-    private void send() {
+    private void send(String shapeName) {
         try {
-            if(isRiseHand){
+            if(shapeName.equals("Hand")){
                 oos.reset();
-                oos.writeObject(handInformation);
+                oos.writeObject(handInfos);
+                oos.flush();
+            }else if(shapeName.equals("Msg")){
+                oos.reset();
+                oos.writeObject(messages);
                 oos.flush();
             }
         }
@@ -269,23 +272,33 @@ public class ClientBoard extends JFrame implements ActionListener {
             chatTextArea.append("\nError");
         }
     }
+    private static void setButtonEnabled(final boolean b) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                sendButton.setEnabled(b);
+
+            }
+        });
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == exit_sbm) {
-            isRiseHand = false;
             System.exit(0);
         }else if(e.getSource() == hand_sbm){
-            isRiseHand = true;
-            handInformation.add(true);
-            send();
+            handInfo.shapeName = "Hand";
+            handInfos.add(handInfo);
+            send("Hand");
         }
 
     }
 
     public void runClient() {
         try {
+            sendButton.setEnabled(false);
             connToS();
             streams();
             processConn();
@@ -315,13 +328,14 @@ public class ClientBoard extends JFrame implements ActionListener {
 
 
     public void processConn() throws IOException {
+        setButtonEnabled(true);
         dispMessage("Successful");
         do {
             try {
 
-                cordinates = (ArrayList<Points>) ois.readObject();
-                for (Points cordinate : cordinates) {
-                    switch (cordinate.shapeName) {
+                infos = (ArrayList<Points>) ois.readObject();
+                for (Points info : infos) {
+                    switch (info.shapeName) {
                         case "Square":
                             drawType = "Square";
                             break;
@@ -349,6 +363,9 @@ public class ClientBoard extends JFrame implements ActionListener {
                         case "Time":
                             drawType = "Time";
                             break;
+                        case "Msg":
+                            dispMessage(info.message);
+                            break;
                     }
 
                 }
@@ -360,8 +377,9 @@ public class ClientBoard extends JFrame implements ActionListener {
     }
 
     public static void closeConn() {
-        dispMessage("\nTerminating Conn\n");
 
+        dispMessage("\nTerminating Conn\n");
+        setButtonEnabled(false);
         try {
             oos.close();
             ois.close();
@@ -375,6 +393,26 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static void dispMessage(final String string) {
         chatTextArea.append("\n" + string);
     }
+
+    private static Component rootPane;
+    BorderLayout bl;
+    public static ObjectOutputStream oos;
+    public static ObjectInputStream ois;
+    public static String srv;
+    public static Socket myClient;
+    public static ArrayList<Points> infos = new ArrayList<>();
+    public static String drawType = "Nothing";
+    public static int min,sec;
+    public static Timer timer;
+    public static boolean flag_for_clock = true;
+    public static ArrayList<Points> messages = new ArrayList<>();
+    public static Points message = new Points("message","shapename");
+    public static ArrayList<Points> handInfos = new ArrayList<>();
+    public static Points handInfo = new Points("Hand");
+    JPanel jpComponent;
+    JMenuBar jmb;
+    JMenu exit,hand;
+    JMenuItem exit_sbm,hand_sbm;
     public javax.swing.JLabel attandanceLabel;
     public javax.swing.JTextArea attandanceTextArea;
     public static javax.swing.JTextArea chatTextArea;
@@ -385,7 +423,7 @@ public class ClientBoard extends JFrame implements ActionListener {
     private javax.swing.JScrollPane jScrollPane3;
     public static javax.swing.JLabel lblMin;
     public static javax.swing.JLabel lblSec;
-    public javax.swing.JButton sendButton;
+    public static javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
     public static javax.swing.JTextArea shapesTextArea;
     public javax.swing.JButton riseHand;
