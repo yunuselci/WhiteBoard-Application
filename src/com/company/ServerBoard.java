@@ -23,6 +23,7 @@ public class ServerBoard extends JFrame implements ActionListener,
     public static int min,sec;
     Timer timer;
     boolean flag_for_clock = true;
+    public static ArrayList<Boolean> handInfos = new ArrayList<>();
 
     public ServerBoard() {
         super("Teacher Screen");
@@ -382,16 +383,23 @@ public class ServerBoard extends JFrame implements ActionListener,
         System.out.println("successfull");
 
         //setButtonEnabled(true);
-        String msg = "";
+        //String msg = "";
 
         do {
             try {
-                msg = (String) ois.readObject();
-                dispMessage("\n" + msg);
+                //msg = (String) ois.readObject();
+                //dispMessage("\n" + msg);
+                handInfos = (ArrayList<Boolean>) ois.readObject();
+                for (Boolean handInfo : handInfos) {
+                    if(handInfo){
+                        JOptionPane.showMessageDialog(rootPane,"Student raised his/her hand","Stopped",JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+
             } catch (ClassNotFoundException e) {
                 dispMessage("Unknown");
             }
-        } while (!msg.equals("C:ExitTheSystem"));
+        } while (true/*!msg.equals("C:ExitTheSystem")*/);
     }
 
     public void closeConn() {

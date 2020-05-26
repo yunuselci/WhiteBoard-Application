@@ -25,6 +25,8 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static int min,sec;
     public static Timer timer;
     public static boolean flag_for_clock = true;
+    public boolean isRiseHand = false;
+    public ArrayList<Boolean> handInformation = new ArrayList<Boolean>();
 
     public ClientBoard(String info) {
         super("Student Screen");
@@ -39,15 +41,20 @@ public class ClientBoard extends JFrame implements ActionListener {
 
     JPanel jpComponent;
     JMenuBar jmb;
-    JMenu exit;
-    JMenuItem exit_sbm;
+    JMenu exit,hand;
+    JMenuItem exit_sbm,hand_sbm;
 
     public void menu() {
         jmb = new JMenuBar();
+        hand = new JMenu("Hand");
         exit = new JMenu("Exit");
+        hand_sbm = new JMenuItem("Rise Your Hand");
         exit_sbm = new JMenuItem("Close App");
+        hand_sbm.addActionListener(this);
         exit_sbm.addActionListener(this);
+        hand.add(hand_sbm);
         exit.add(exit_sbm);
+        jmb.add(hand);
         jmb.add(exit);
         add(jmb);
         setJMenuBar(jmb);
@@ -237,12 +244,29 @@ public class ClientBoard extends JFrame implements ActionListener {
 
     private void chatTextFieldActionPerformed(ActionEvent evt) {
     }
+    private void send() {
+        try {
+            if(isRiseHand){
+                oos.reset();
+                oos.writeObject(handInformation);
+                oos.flush();
+            }
+        }
+        catch (IOException e) {
+            chatTextArea.append("\nError");
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == exit_sbm) {
+            isRiseHand = false;
             System.exit(0);
+        }else if(e.getSource() == hand_sbm){
+            isRiseHand = true;
+            handInformation.add(true);
+            send();
         }
 
     }
