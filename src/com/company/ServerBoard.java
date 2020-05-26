@@ -374,7 +374,7 @@ public class ServerBoard extends JFrame implements ActionListener,
         oos.flush();
 
         ois = new ObjectInputStream(conn.getInputStream());
-        dispMessage("\nStreams\n");
+        dispMessage("\nConnected.\n");
     }
 
     public void processConn() throws IOException {
@@ -390,10 +390,8 @@ public class ServerBoard extends JFrame implements ActionListener,
                 //msg = (String) ois.readObject();
                 //dispMessage("\n" + msg);
                 handInfos = (ArrayList<Boolean>) ois.readObject();
-                for (Boolean handInfo : handInfos) {
-                    if(handInfo){
-                        JOptionPane.showMessageDialog(rootPane,"Student raised his/her hand","Stopped",JOptionPane.INFORMATION_MESSAGE);
-                    }
+                if(handInfos.get(0)){
+                    JOptionPane.showMessageDialog(rootPane,"Student raised his/her hand","Stopped",JOptionPane.INFORMATION_MESSAGE);
                 }
 
             } catch (ClassNotFoundException e) {
@@ -474,7 +472,7 @@ public class ServerBoard extends JFrame implements ActionListener,
 
 
     public static void dispMessage(final String string) {
-        System.out.println(string);
+        chatTextArea.append("\n"+string);
     }
 
     public void setButtonEnabled(final boolean b) {
@@ -692,7 +690,7 @@ public class ServerBoard extends JFrame implements ActionListener,
     public javax.swing.JButton btnStart;
     public javax.swing.JComboBox cboxMin;
     public javax.swing.JComboBox cboxSec;
-    public javax.swing.JTextArea chatTextArea;
+    public static javax.swing.JTextArea chatTextArea;
     public javax.swing.JTextField chatTextField;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;

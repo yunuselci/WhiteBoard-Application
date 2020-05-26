@@ -76,10 +76,9 @@ public class ClientBoard extends JFrame implements ActionListener {
         lblSec = new javax.swing.JLabel();
         lblMin = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        riseHand = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jpComponent.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jpComponentLayout = new javax.swing.GroupLayout(jpComponent);
         jpComponent.setLayout(jpComponentLayout);
@@ -128,6 +127,13 @@ public class ClientBoard extends JFrame implements ActionListener {
         jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 30)); // NOI18N
         jLabel3.setText(":");
 
+        riseHand.setText("Rise Your Hand");
+        riseHand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                riseHandActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,14 +156,16 @@ public class ClientBoard extends JFrame implements ActionListener {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lblSec)))
+                                                .addComponent(lblSec)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(riseHand, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 18, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGap(0, 14, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(shapesLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -170,8 +178,9 @@ public class ClientBoard extends JFrame implements ActionListener {
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(lblSec, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(lblMin, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(39, 39, 39)
+                                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(riseHand, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))
+                                                .addGap(38, 38, 38)
                                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(chatTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -241,7 +250,11 @@ public class ClientBoard extends JFrame implements ActionListener {
         }
 
     }
-
+    private void riseHandActionPerformed(java.awt.event.ActionEvent evt) {
+        isRiseHand = true;
+        handInformation.add(true);
+        send();
+    }
     private void chatTextFieldActionPerformed(ActionEvent evt) {
     }
     private void send() {
@@ -360,11 +373,11 @@ public class ClientBoard extends JFrame implements ActionListener {
 
 
     public static void dispMessage(final String string) {
-        System.out.println(string);
+        chatTextArea.append("\n" + string);
     }
     public javax.swing.JLabel attandanceLabel;
     public javax.swing.JTextArea attandanceTextArea;
-    public javax.swing.JTextArea chatTextArea;
+    public static javax.swing.JTextArea chatTextArea;
     public javax.swing.JTextField chatTextField;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
@@ -375,4 +388,6 @@ public class ClientBoard extends JFrame implements ActionListener {
     public javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
     public static javax.swing.JTextArea shapesTextArea;
+    public javax.swing.JButton riseHand;
+
 }
