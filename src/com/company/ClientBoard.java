@@ -62,8 +62,8 @@ public class ClientBoard extends JFrame implements ActionListener {
         attandanceTextArea = new javax.swing.JTextArea();
         JScrollPane jScrollPane3 = new JScrollPane();
         shapesTextArea = new javax.swing.JTextArea();
-        lblSec = new javax.swing.JLabel();
-        lblMin = new javax.swing.JLabel();
+        secLabel = new javax.swing.JLabel();
+        minLabel = new javax.swing.JLabel();
         JLabel jLabel3 = new JLabel();
         riseHand = new javax.swing.JButton();
 
@@ -101,11 +101,11 @@ public class ClientBoard extends JFrame implements ActionListener {
         shapesTextArea.setRows(5);
         jScrollPane3.setViewportView(shapesTextArea);
 
-        lblSec.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
-        lblSec.setText("00");
+        secLabel.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
+        secLabel.setText("00");
 
-        lblMin.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
-        lblMin.setText("00");
+        minLabel.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
+        minLabel.setText("00");
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", Font.PLAIN, 30)); // NOI18N
         jLabel3.setText(":");
@@ -131,11 +131,11 @@ public class ClientBoard extends JFrame implements ActionListener {
                                         .addComponent(jScrollPane3)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(10, 10, 10)
-                                                .addComponent(lblMin)
+                                                .addComponent(minLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lblSec)
+                                                .addComponent(secLabel)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(riseHand, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap(37, Short.MAX_VALUE))
@@ -155,8 +155,8 @@ public class ClientBoard extends JFrame implements ActionListener {
                                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(lblSec, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(lblMin, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(secLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(minLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(riseHand, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))
                                                 .addGap(38, 38, 38)
@@ -182,55 +182,71 @@ public class ClientBoard extends JFrame implements ActionListener {
     }
 
     private void attandanceFileCreate(){
-        try {
-            File myObj = new File("attandance.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
+        try
+        {
+            File file = new File("attandance.txt");
+            if (file.createNewFile())
+            {
+                System.out.println("Attandance created: " + file.getName());
             }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
+            else
+            {
+                System.out.println("Attandance is already exists.");
+            }
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error occurupted.Stack tree is: ");
             e.printStackTrace();
         }
     }
 
     private void attandanceFileWrite(String attandance){
-        try {
+        try
+        {
             Files.write(Paths.get("attandance.txt"), attandance.getBytes(), StandardOpenOption.APPEND);
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println("Wroted");
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error occurupted.Stack tree is: ");
             e.printStackTrace();
         }
     }
 
     private void readAttandance(){
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader(
-                    "C:\\Users\\Yunus\\IntellijIdeaProjects\\yunus_berkay\\attandance.txt"));
-            String line = reader.readLine();
-            while (line != null) {
-                //System.out.println(line);
-                attandanceTextArea.append(line+"\n");
-                // read next line
-                line = reader.readLine();
+        BufferedReader bufferedReader;
+        try
+        {
+            bufferedReader = new BufferedReader(new FileReader(
+                    "attandance.txt"));
+            String readLine = bufferedReader.readLine();
+            while (readLine != null)
+            {
+                //System.out.println(readLine);
+                attandanceTextArea.append(readLine+"\n");
+                // read next readLine
+                readLine = bufferedReader.readLine();
             }
-            reader.close();
-        } catch (IOException e) {
+            bufferedReader.close();
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
     private void clearTheAttandance(){
-        try{
-            FileWriter fwOb = new FileWriter("attandance.txt", false);
-            PrintWriter pwOb = new PrintWriter(fwOb, false);
-            pwOb.flush();
-            pwOb.close();
-            fwOb.close();
-        }catch (IOException e){
+        try
+        {
+            FileWriter fileWriter = new FileWriter("attandance.txt", false);
+            PrintWriter printWriter = new PrintWriter(fileWriter, false);
+            printWriter.flush();
+            printWriter.close();
+            fileWriter.close();
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 
@@ -239,44 +255,56 @@ public class ClientBoard extends JFrame implements ActionListener {
     public static void displayTime() {
 
         timer = new Timer(1000, e -> {
-            lblMin.setForeground(Color.black);
-            lblSec.setForeground(Color.black);
+            minLabel.setForeground(Color.black);
 
-            if (sec == 0) {
-                sec = 60;
-                min--;
+            secLabel.setForeground(Color.black);
+
+            if (second == 0)
+            {
+                second = 60;
+                minute--;
             }
-            if (min == 0) {
-                lblMin.setForeground(Color.red);
-                lblSec.setForeground(Color.red);
+            if (minute == 0)
+            {
+                minLabel.setForeground(Color.red);
+                secLabel.setForeground(Color.red);
 
             }
-            if (min < 0) {
+            if (minute < 0)
+            {
+
                 attandanceTextArea.setText("");
                 JOptionPane.showMessageDialog(rootPane, "Time is Over", "Stopped", JOptionPane.ERROR_MESSAGE);
                 terminateTheConnection();
-                min = 0;
-                sec = 0;
+                minute = 0;
+                second = 0;
                 timer.stop();
+
             } else {
 
-                sec--;
-                if (sec < 10) {
-                    lblSec.setText("0" + sec);
-                    flag_for_clock = false;
+                second--;
+                if (second < 10)
+                {
+                    secLabel.setText("0" + second);
+                    flagForClock = false;
                 }
-                if (min < 10) {
-                    lblMin.setText("0" + min);
-                    if (sec < 10) {
-                        lblSec.setText("0" + sec);
-                    } else {
-                        lblSec.setText("" + sec);
+                if (minute < 10)
+                {
+                    minLabel.setText("0" + minute);
+                    if (second < 10)
+                    {
+                        secLabel.setText("0" + second);
                     }
-                    flag_for_clock = false;
+                    else
+                    {
+                        secLabel.setText("" + second);
+                    }
+                    flagForClock = false;
                 }
-                if (flag_for_clock) {
-                    lblMin.setText("" + min);
-                    lblSec.setText("" + sec);
+                if (flagForClock)
+                {
+                    minLabel.setText("" + minute);
+                    secLabel.setText("" + second);
                 }
 
             }
@@ -308,11 +336,14 @@ public class ClientBoard extends JFrame implements ActionListener {
             establishTheConnection();
             clientListenTheConnection();
 
-        } catch (EOFException e) {
+        } catch (EOFException e)
+        {
             displayTheMessage("\nClient Terminated Conn\n");
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
-        } finally {
+        } finally
+        {
             terminateTheConnection();
         }
 
@@ -408,7 +439,7 @@ public class ClientBoard extends JFrame implements ActionListener {
                 objectOutputStream.flush();
             }
         } catch (IOException e) {
-            chatTextArea.append("\nError");
+            chatTextArea.append("\nError occurupted from sendTheInformationList");
         }
     }
 
@@ -448,33 +479,32 @@ public class ClientBoard extends JFrame implements ActionListener {
 
 
     //Variables
-    public static Component rootPane;
     BorderLayout borderLayout;
+    JPanel jpComponent;
+    JMenuBar jMenuBar;
+    JMenu exit, hand;
+    JMenuItem exitSubMenu, handSubMenu;
+    public static Component rootPane;
     public static ObjectOutputStream objectOutputStream;
     public static ObjectInputStream objectInputStream;
     public static String serve;
     public static Socket theStudent;
     public static ArrayList<Informations> infos = new ArrayList<>();
     public static String drawType = "Nothing";
-    public static int min, sec;
-    public static int n = 10000 + new Random().nextInt(90000);
-
+    public static int minute, second;
+    public static int n = 10000 + new Random().nextInt(90000); //Random id
     public static Timer timer;
-    public static boolean flag_for_clock = true;
+    public static boolean flagForClock = true;
     public static ArrayList<Informations> messages = new ArrayList<>();
     public static Informations message = new Informations("message", "shapename");
     public static ArrayList<Informations> handInfos = new ArrayList<>();
     public static Informations handInfo = new Informations("Hand");
-    JPanel jpComponent;
-    JMenuBar jMenuBar;
-    JMenu exit, hand;
-    JMenuItem exitSubMenu, handSubMenu;
     public javax.swing.JLabel attandanceLabel;
     public static javax.swing.JTextArea attandanceTextArea;
     public static javax.swing.JTextArea chatTextArea;
     public javax.swing.JTextField chatTextField;
-    public static javax.swing.JLabel lblMin;
-    public static javax.swing.JLabel lblSec;
+    public static javax.swing.JLabel minLabel;
+    public static javax.swing.JLabel secLabel;
     public static javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
     public static javax.swing.JTextArea shapesTextArea;

@@ -10,16 +10,16 @@ public class ServerPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-
-        if (ServerBoard.draw_type.equals("Square")) {
+        //Draw Square
+        if (ServerBoard.drawType.equals("Square")) {
             ++shapeCounter;
             for (int i = 0; i < ServerBoard.square.size(); i++) {
-                ServerBoard.sendTheInformationList("Square");
+                ServerBoard.sendTheInformationList("Square"); //Send information of drawed shapes
                 g.drawRect(ServerBoard.square.get(i).x, ServerBoard.square.get(i).y, 150, 150);
-                ServerBoard.writeShapeCounter(shapeCounter);
+                ServerBoard.writeShapeCounter(shapeCounter); // write the counter
             }
             shapeCounter = 0;
-        } else if (ServerBoard.draw_type.equals("FSquare")) {
+        } else if (ServerBoard.drawType.equals("FSquare")) {
 
             ++shapeCounter;
             for (int i = 0; i < ServerBoard.FSquare.size(); i++) {
@@ -28,7 +28,7 @@ public class ServerPanel extends JPanel {
                 ServerBoard.writeShapeCounter(shapeCounter);
             }
             shapeCounter = 0;
-        } else if (ServerBoard.draw_type.equals("Circle") && ServerBoard.type_for_circle == 1) {
+        } else if (ServerBoard.drawType.equals("Circle") && ServerBoard.typeForCircle == 1) {
             ++shapeCounter;
             for (int i = 0; i < ServerBoard.circle.size(); i++) {
                 ServerBoard.sendTheInformationList("Circle");
@@ -36,7 +36,7 @@ public class ServerPanel extends JPanel {
                 ServerBoard.writeShapeCounter(shapeCounter);
             }
             shapeCounter = 0;
-        } else if (ServerBoard.draw_type.equals("FCircle")) {
+        } else if (ServerBoard.drawType.equals("FCircle")) {
             ++shapeCounter;
             for (int i = 0; i < ServerBoard.FCircle.size(); i++) {
                 ServerBoard.sendTheInformationList("FCircle");
@@ -44,14 +44,14 @@ public class ServerPanel extends JPanel {
                 ServerBoard.writeShapeCounter(shapeCounter);
             }
             shapeCounter = 0;
-        } else if (ServerBoard.draw_type.equals("MSquare")) {
+        } else if (ServerBoard.drawType.equals("MSquare")) {
 
             for (int i = 0; i < ServerBoard.squares.size(); i++) {
                 ServerBoard.sendTheInformationList("MSquare");
                 g.drawRect(ServerBoard.squares.get(i).x, ServerBoard.squares.get(i).y, 150, 150);
                 ServerBoard.writeShapeCounter(i + 1);
             }
-        } else if (ServerBoard.draw_type.equals("MCircle")) {
+        } else if (ServerBoard.drawType.equals("MCircle")) {
 
             for (int i = 0; i < ServerBoard.circles.size(); i++) {
                 ServerBoard.sendTheInformationList("MCircle");
@@ -59,7 +59,7 @@ public class ServerPanel extends JPanel {
                 ServerBoard.writeShapeCounter(i + 1);
 
             }
-        } else if (ServerBoard.draw_type.equals("Line")) {
+        } else if (ServerBoard.drawType.equals("Line")) {
             ++shapeCounter;
             for (int i = 0; i < ServerBoard.line.size(); i++) {
                 ServerBoard.sendTheInformationList("Line");
@@ -68,7 +68,7 @@ public class ServerPanel extends JPanel {
                 ServerBoard.writeShapeCounter(shapeCounter);
             }
             shapeCounter = 0;
-        } else if (ServerBoard.draw_type.equals("Clear")) {
+        } else if (ServerBoard.drawType.equals("Clear")) {
 
             ServerBoard.sendTheInformationList("Clear");
             g.setColor(Color.WHITE);

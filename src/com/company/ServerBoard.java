@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ServerBoard extends JFrame implements ActionListener, MouseListener {
 
-    public ServerBoard() {
+    public ServerBoard() { // constructor
         super("Teacher Screen");
         borderLayout = new BorderLayout();
         setLayout(borderLayout);
@@ -22,24 +22,24 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         attandanceFileCreate();
         clearTheAttandance();
 
-        for (int i = 0; i < 60; i++) {
-            if (i < 10) {
-                minComboBox.addItem("0" + i);
+        for (int minItems = 0; minItems < 60; minItems++) { // Add the numbers of combobox  heere
+            if (minItems < 10) {
+                minComboBox.addItem("0" + minItems);
             } else {
-                minComboBox.addItem(i);
+                minComboBox.addItem(minItems);
             }
 
         }
-        for (int i = 0; i < 60; i++) {
-            if (i < 10) {
-                secComboBox.addItem("0" + i);
+        for (int secItems = 0; secItems < 60; secItems++) {
+            if (secItems < 10) {
+                secComboBox.addItem("0" + secItems);
             } else {
-                secComboBox.addItem(i);
+                secComboBox.addItem(secItems);
             }
         }
     }
 
-    public void theMenuBar() {
+    public void theMenuBar() { //Menu bar is here
         jMenuBar = new JMenuBar();
 
 
@@ -51,14 +51,9 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         squareSubMenu = new JMenuItem("Square");
         squareSubMenu.addActionListener(this);
 
-        msquareSubMenu = new JMenuItem("Multiple Square");
-        msquareSubMenu.addActionListener(this);
 
         circleSubMenu = new JMenuItem("Circle");
         circleSubMenu.addActionListener(this);
-
-        mcircleSubMenu = new JMenuItem("Multiple Circle");
-        mcircleSubMenu.addActionListener(this);
 
         lineSubMenu = new JMenuItem("Line");
         lineSubMenu.addActionListener(this);
@@ -71,13 +66,10 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
 
         shape.add(squareSubMenu);
-        shape.add(msquareSubMenu);
         shape.add(circleSubMenu);
-        shape.add(mcircleSubMenu);
         shape.add(lineSubMenu);
         clear.add(clearSubMenu);
         exit.add(exitSubMenu);
-
 
 
         jMenuBar.add(shape);
@@ -89,7 +81,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
     }
 
-    public void Components() {
+    public void Components() { //Gui is here
         jpComponent = new ServerPanel();
         jpComponent.addMouseListener(this);
 
@@ -253,52 +245,76 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     }
 
     private void btnStartActionPerformed() {
+
         time.min = minute;
+
         time.sec = second;
+
         time.shapeName = "Time";
+
         times.add(time);
+
         for (int i = 0; i < times.size(); i++) {
             sendTheInformationList("Time");
         }
 
-        timer = new Timer(1000, e -> {
+        timer = new Timer(1000, e -> { //using actions like this is ide suggestion
             minLabel.setForeground(Color.black);
             secLabel.setForeground(Color.black);
 
-            if (second == 0) {
+            if (second == 0)
+            {
                 second = 60;
                 minute--;
             }
-            if (minute == 0) {
+
+            if (minute == 0)
+            {
                 minLabel.setForeground(Color.red);
                 secLabel.setForeground(Color.red);
 
             }
-            if (minute < 0) {
+
+            if (minute < 0)
+            {
                 attandanceTextArea.setText("");
                 JOptionPane.showMessageDialog(rootPane, "Time is Over", "Stopped", JOptionPane.ERROR_MESSAGE);
                 terminateTheConnection();
                 minute = 0;
                 second = 0;
                 timer.stop();
-            } else {
+            }
+            else
+                {
 
                 second--;
-                if (second < 10) {
+
+                if (second < 10)
+                {
                     secLabel.setText("0" + second);
-                    flag_for_clock = false;
+                    flagForClock = false;
                 }
-                if (minute < 10) {
+
+                if (minute < 10)
+                {
                     minLabel.setText("0" + minute);
-                    if (second < 10) {
+
+                    if (second < 10)
+                    {
                         secLabel.setText("0" + second);
-                    } else {
+                    }
+                    else
+                    {
                         secLabel.setText("" + second);
                     }
-                    flag_for_clock = false;
+
+                    flagForClock = false;
+
                 }
-                if (flag_for_clock) {
+                if (flagForClock)
+                {
                     minLabel.setText("" + minute);
+
                     secLabel.setText("" + second);
                 }
 
@@ -306,71 +322,81 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
 
         });
+
         timer.start();
     }
 
-    private void attandanceFileCreate(){
+    private void attandanceFileCreate() {
         try {
-            File myObj = new File("attandance.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
+            File file = new File("attandance.txt");
+
+            if (file.createNewFile())
+            {
+                System.out.println("Attandance created: " + file.getName());
             }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    private void attandanceFileWrite(String attandance){
-        try {
-            Files.write(Paths.get("attandance.txt"), attandance.getBytes(), StandardOpenOption.APPEND);
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    private void readAttandance(){
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader(
-                    "C:\\Users\\Yunus\\IntellijIdeaProjects\\yunus_berkay\\attandance.txt"));
-            String line = reader.readLine();
-            while (line != null) {
-                //System.out.println(line);
-                attandanceTextArea.append(line+"\n");
-                // read next line
-                line = reader.readLine();
+            else
+            {
+                System.out.println("Attandance is already exists.");
             }
-            reader.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error occurupted.Stack tree is: ");
             e.printStackTrace();
         }
     }
 
-    private void clearTheAttandance(){
-        try{
-            FileWriter fwOb = new FileWriter("attandance.txt", false);
-            PrintWriter pwOb = new PrintWriter(fwOb, false);
-            pwOb.flush();
-            pwOb.close();
-            fwOb.close();
-        }catch (IOException e){
+    private void attandanceFileWrite() {
+        try
+        {
+            Files.write(Paths.get("attandance.txt"), "Teacher\n".getBytes(), StandardOpenOption.APPEND);
+            System.out.println("Wroted.");
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error occurupted.Stack tree is: ");
             e.printStackTrace();
         }
+    }
 
+    private void readAttandance() {
+        BufferedReader bufferedReader;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(
+                    "attandance.txt"));
+            String readLine = bufferedReader.readLine();
+            while (readLine != null)
+            {
+                attandanceTextArea.append(readLine + "\n");
+                readLine = bufferedReader.readLine();
+            }
+            bufferedReader.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearTheAttandance() {
+        try
+        {
+            FileWriter fileWriter = new FileWriter("attandance.txt", false);
+            PrintWriter printWriter = new PrintWriter(fileWriter, false);
+            printWriter.flush();
+            printWriter.close();
+            fileWriter.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static void writeShapeCounter(int numberOfShapes) {
         if (numberOfShapes <= 1) {
-            shapesTextArea.setText(numberOfShapes + " " + draw_type + " is drawed");
-
+            shapesTextArea.setText(numberOfShapes + " " + drawType + " is drawed");
         } else {
-            shapesTextArea.setText(numberOfShapes + " " + draw_type + " are drawed");
-
+            shapesTextArea.setText(numberOfShapes + " " + drawType + " are drawed");
         }
 
     }
@@ -379,25 +405,32 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         try {
             sendButton.setEnabled(false);
             serverSocket = new ServerSocket(12345, 100);
-
-            while (true) {
-                try {
+            while (true)
+            {
+                try
+                {
                     listenTheConnection();
                     establishTheConnection();
                     serverListenTheConnection();
-                } catch (EOFException e) {
+                }
+                catch (EOFException e)
+                {
                     displayTheMessage("\nServer Terminated Conn\n");
-                } finally {
+                }
+                finally
+                {
                     terminateTheConnection();
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
     public void listenTheConnection() throws IOException {
-        displayTheMessage("Please Wait...\n");
+        displayTheMessage("Waiting the Connection...\n");
         socket = serverSocket.accept();
         displayTheMessage("Connection Received\n");
     }
@@ -408,7 +441,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
         objectInputStream = new ObjectInputStream(socket.getInputStream());
         displayTheMessage("\nChat Activated.\n");
-        attandanceFileWrite("Teacher\n");
+        attandanceFileWrite();
         displayTheMessage("Teacher has been processed to attandance file\n");
     }
 
@@ -418,24 +451,22 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
         do {
             try {
-                //msg = (String) ois.readObject();
-                //dispMessage("\n" + msg);
                 infos = (ArrayList<Informations>) objectInputStream.readObject();
                 for (Informations info : infos) {
                     if (info.shapeName.equals("Msg")) {
-                        isMessageRecieved=true;
-                        isRaiseHand=false;
+                        isMessageRecieved = true;
+                        isRaiseHand = false;
                     } else if (info.shapeName.equals("Hand")) {
-                        isRaiseHand=true;
-                        isMessageRecieved=false;
+                        isRaiseHand = true;
+                        isMessageRecieved = false;
                     }
                 }
-                if(isMessageRecieved){
-                    isRaiseHand=false;
+                if (isMessageRecieved) {
+                    isRaiseHand = false;
                     displayTheMessage(infos.get(0).message);
                 }
-                if(isRaiseHand){
-                    isMessageRecieved =false;
+                if (isRaiseHand) {
+                    isMessageRecieved = false;
                     JOptionPane.showMessageDialog(rootPane, "Student raised his/her hand", "Hand", JOptionPane.INFORMATION_MESSAGE);
 
                 }
@@ -513,11 +544,14 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
         displayTheMessage("\nTerminating Conn\n");
         sendButtonEnabler(false);
 
-        try {
+        try
+        {
             objectOutputStream.close();
             objectInputStream.close();
             socket.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
@@ -533,7 +567,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     @Override
     public void mouseClicked(MouseEvent e) {
 
-        switch (draw_type) {
+        switch (drawType) {
             case "Square":
                 squareInformations.x = e.getX();
                 squareInformations.y = e.getY();
@@ -560,28 +594,28 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
                 FCircle.add(FCircleInformations);
                 break;
             case "MSquare": {
-                Informations p = new Informations(x, y);
-                p.x = e.getX();
-                p.y = e.getY();
-                p.shapeName = "MSquare";
+                Informations points = new Informations(x, y);
+                points.x = e.getX();
+                points.y = e.getY();
+                points.shapeName = "MSquare";
                 circles.clear();
-                squares.add(p);
+                squares.add(points);
                 break;
             }
             case "MCircle": {
-                Informations p = new Informations(x, y);
-                p.x = e.getX();
-                p.y = e.getY();
-                p.shapeName = "MCircle";
+                Informations points = new Informations(x, y);
+                points.x = e.getX();
+                points.y = e.getY();
+                points.shapeName = "MCircle";
                 squares.clear();
-                circles.add(p);
+                circles.add(points);
                 break;
             }
             case "Clear": {
-                Informations p = new Informations(x, y);
-                p.x = 100;
-                p.y = 100;
-                p.shapeName = "Clear";
+                Informations points = new Informations(x, y);
+                points.x = 100;
+                points.y = 100;
+                points.shapeName = "Clear";
                 //square.clear();-make bugs
                 squares.clear();
                 //line.clear();-make bugs
@@ -589,7 +623,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
                 circles.clear();
                 //FSquare.clear();-make bugs
                 //FCircle.clear();-make bugs
-                clears.add(p);
+                clears.add(points);
                 break;
             }
         }
@@ -599,20 +633,20 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (draw_type.equals("Line")) {
-            p.x1 = x2 = e.getX();
-            p.y1 = y2 = e.getY();
+        if (drawType.equals("Line")) {
+            points.x1 = x2 = e.getX();
+            points.y1 = y2 = e.getY();
         }
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (draw_type.equals("Line")) {
-            p.x2 = e.getX();
-            p.y2 = e.getY();
-            p.shapeName = "Line";
-            line.add(p);
+        if (drawType.equals("Line")) {
+            points.x2 = e.getX();
+            points.y2 = e.getY();
+            points.shapeName = "Line";
+            line.add(points);
 
             repaint();
         }
@@ -632,32 +666,40 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-         if (e.getSource() == lineSubMenu) {
-            draw_type = "Line";
+        if (e.getSource() == lineSubMenu) {
+            drawType = "Line";
         } else if (e.getSource() == squareSubMenu) {
-            draw_type = "Square";
-            type_for_square = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Square\n2- Fill Square"));
-            if (type_for_square == 2) {
-                draw_type = "FSquare";
-            } else {
-                draw_type = "Square";
+            drawType = "Square";
+            typeForSquare = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Square"+
+                    "\n2- Fill Square" + "\n3- Multiple Square" ));
+            if (typeForSquare == 1) {
+                drawType = "Square";
+            } else if(typeForSquare == 2) {
+                drawType = "FSquare";
+            } else if(typeForSquare == 3) {
+                drawType = "MSquare";
+            } else{
+                JOptionPane.showMessageDialog(this,"Invalid value entered","Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Square");
-        } else if (e.getSource() == msquareSubMenu) {
-            draw_type = "MSquare";
-        } else if (e.getSource() == circleSubMenu) {
-            draw_type = "Circle";
-            type_for_circle = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Circle\n2- Fill Circle"));
-            if (type_for_circle == 2) {
-                draw_type = "FCircle";
-            } else {
-                draw_type = "Circle";
+        }  else if (e.getSource() == circleSubMenu) {
+            drawType = "Circle";
+            typeForCircle = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter\n1- Circle"+
+                    "\n2- Fill Circle" + "\n3- Multiple Circle"));
+            if (typeForCircle == 1) {
+                drawType = "Circle";
+            } else if(typeForCircle == 2) {
+                drawType = "FCircle";
+            } else if(typeForCircle == 3){
+                drawType = "MCircle";
+            }else{
+                JOptionPane.showMessageDialog(this,"Invalid value entered","Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Creating a Circle");
-        } else if (e.getSource() == mcircleSubMenu) {
-            draw_type = "MCircle";
         } else if (e.getSource() == clearSubMenu) {
-            draw_type = "Clear";
+            drawType = "Clear";
             JOptionPane.showMessageDialog(this, "Now Click Center Panel for Clear The Screen");
 
         } else if (e.getSource() == exitSubMenu) {
@@ -667,17 +709,23 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     }
 
     //Variables
-    public static int minute, second;
     Timer timer;
-    boolean flag_for_clock = true;
     BorderLayout borderLayout;
+    JPanel jpComponent;
+    JMenuBar jMenuBar;
+    JMenu shape, clear, exit;
+    JMenuItem lineSubMenu, squareSubMenu, circleSubMenu, clearSubMenu, exitSubMenu;
+    public static int minute, second;
     protected static int x, x1, x2;
     protected static int y, y1, y2;
-    public static String draw_type = "Empty";
-    public static int type_for_square = 0;
-    public static int type_for_circle = 0;
-        public static ObjectOutputStream objectOutputStream;
-        public static ObjectInputStream objectInputStream;
+    public static int typeForSquare = 0;
+    public static int typeForCircle = 0;
+    boolean flagForClock = true;
+    public boolean isMessageRecieved = false;
+    public boolean isRaiseHand = false;
+    public static String drawType = "Empty";
+    public static ObjectOutputStream objectOutputStream;
+    public static ObjectInputStream objectInputStream;
     public static ServerSocket serverSocket;
     public static Socket socket;
     public static ArrayList<Informations> infos = new ArrayList<>();
@@ -697,11 +745,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     public static Informations FSquareInformations = new Informations(x, y);
     public static Informations circleInformations = new Informations(x, y);
     public static Informations FCircleInformations = new Informations(x, y);
-    public static Informations p = new Informations(x1, x2, y1, y2);
-    JPanel jpComponent;
-    JMenuBar jMenuBar;
-    JMenu  shape, clear, exit;
-    JMenuItem lineSubMenu, squareSubMenu, msquareSubMenu, circleSubMenu, mcircleSubMenu, clearSubMenu, exitSubMenu;
+    public static Informations points = new Informations(x1, x2, y1, y2);
     public javax.swing.JLabel attandanceLabel;
     public javax.swing.JTextArea attandanceTextArea;
     public javax.swing.JButton buttonStart;
@@ -714,8 +758,6 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     public javax.swing.JButton sendButton;
     public javax.swing.JLabel shapesLabel;
     static public javax.swing.JTextArea shapesTextArea;
-    public boolean isMessageRecieved = false;
-    public boolean isRaiseHand = false;
     //End
 }
 

@@ -1,7 +1,7 @@
 package com.company;
 
 import java.io.Serializable;
-
+//Using this class, we can exchange data between server and client
 public class Informations implements Serializable {
     int x, x1, x2;
     int y, y1, y2;

@@ -67,8 +67,8 @@ public class ClientPanel extends JPanel {
                 break;
             case "Time":
                 for (int i = 0; i < ClientBoard.infos.size(); i++) {
-                    ClientBoard.min = ClientBoard.infos.get(i).min;
-                    ClientBoard.sec = ClientBoard.infos.get(i).sec;
+                    ClientBoard.minute = ClientBoard.infos.get(i).min;
+                    ClientBoard.second = ClientBoard.infos.get(i).sec;
                 }
                 ClientBoard.displayTime();
                 break;
