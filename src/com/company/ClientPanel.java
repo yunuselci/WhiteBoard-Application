@@ -72,6 +72,8 @@ public class ClientPanel extends JPanel {
                 }
                 ClientBoard.displayTime();
                 break;
+            case "Msg":
+                break;
 
         }
 

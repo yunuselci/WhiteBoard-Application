@@ -380,6 +380,7 @@ public class ClientBoard extends JFrame implements ActionListener {
                             break;
                         case "Msg":
                             isMessageRecieved=true;
+                            drawType = "Msg";
                             break;
                     }
 
