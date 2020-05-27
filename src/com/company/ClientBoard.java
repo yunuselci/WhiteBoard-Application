@@ -33,15 +33,10 @@ public class ClientBoard extends JFrame implements ActionListener {
 
     public void theMenuBar() {
         jMenuBar = new JMenuBar();
-        hand = new JMenu("Hand");
         exit = new JMenu("Exit");
-        handSubMenu = new JMenuItem("Rise Your Hand");
         exitSubMenu = new JMenuItem("Close App");
-        handSubMenu.addActionListener(this);
         exitSubMenu.addActionListener(this);
-        hand.add(handSubMenu);
         exit.add(exitSubMenu);
-        jMenuBar.add(hand);
         jMenuBar.add(exit);
         add(jMenuBar);
         setJMenuBar(jMenuBar);
@@ -469,10 +464,6 @@ public class ClientBoard extends JFrame implements ActionListener {
 
         if (e.getSource() == exitSubMenu) {
             System.exit(0);
-        } else if (e.getSource() == handSubMenu) {
-            handInfo.shapeName = "Hand";
-            handInfos.add(handInfo);
-            sendTheInformationList("Hand");
         }
 
     }
@@ -482,8 +473,8 @@ public class ClientBoard extends JFrame implements ActionListener {
     BorderLayout borderLayout;
     JPanel jpComponent;
     JMenuBar jMenuBar;
-    JMenu exit, hand;
-    JMenuItem exitSubMenu, handSubMenu;
+    JMenu exit;
+    JMenuItem exitSubMenu;
     public static Component rootPane;
     public static ObjectOutputStream objectOutputStream;
     public static ObjectInputStream objectInputStream;

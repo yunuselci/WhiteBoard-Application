@@ -404,6 +404,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     public void startTheServer() {
         try {
             sendButton.setEnabled(false);
+            buttonStart.setEnabled(false);
             serverSocket = new ServerSocket(12345, 100);
             while (true)
             {
@@ -561,6 +562,7 @@ public class ServerBoard extends JFrame implements ActionListener, MouseListener
     }
 
     public void sendButtonEnabler(final boolean b) {
+        SwingUtilities.invokeLater(() -> buttonStart.setEnabled(b));
         SwingUtilities.invokeLater(() -> sendButton.setEnabled(b));
     }
 
